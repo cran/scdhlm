@@ -1,0 +1,16 @@
+scdhlm 0.3
+=======================
+* shiny app for calculating between-case standardized mean difference effect sizes.
+
+scdhlm 0.2.2
+=======================
+* Bug fix in lme_AR1_cov_block_inv.
+* Fixed bug in HPS effect size functions so that results are not dependent on order of data.
+
+scdhlm 0.2.1
+=======================
+* Added vignette demonstrating use of g_REML.
+
+scdhlm 0.2
+=======================
+* Initial release.
