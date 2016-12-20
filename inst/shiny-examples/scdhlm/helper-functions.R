@@ -27,7 +27,6 @@ phase_pairs <- function(x) {
   y[order(order(x$session))]
 }
 
-
 #---------------------------------------------------------------
 # calculate phase border times
 #---------------------------------------------------------------
@@ -52,7 +51,7 @@ phase_lines_by_case <- function(x) {
 default_times <- function(x) {
   range <- range(x$session)
   case_base_last <- with(x, tapply(session[trt==0], case[trt==0], max))
-  case_trt_range <- with(x, tapply(session[trt==1], case[trt==1], function(x) diff(range(x))))
+  case_trt_range <- with(x, tapply(session[trt==1], case[trt==1], function(x) diff(range(x)) + 1))
   A <- min(case_base_last)
   B <- A + min(case_trt_range[which(case_base_last == min(case_base_last))])
   list(range = range, A = A, B = B)
@@ -90,7 +89,10 @@ validate_specification <- function(FE_base, RE_base, FE_trt, RE_trt) {
 # effect size report table
 #---------------------------------------------------------------
 
-summarize_ES <- function(res, filter_vars, filter_vals, design, method, A, B, coverage = 95L) {
+summarize_ES <- function(res, filter_vars, filter_vals, 
+                         design, method, 
+                         FE_base, RE_base, FE_trt, RE_trt,
+                         A, B, coverage = 95L) {
 
   if (method=="RML") {
     ES_summary <- data.frame(
@@ -114,6 +116,10 @@ summarize_ES <- function(res, filter_vars, filter_vals, design, method, A, B, co
   ES_summary$rho <- res$rho
   ES_summary$design <- names(design_names[which(design_names==design)])
   ES_summary$method <- names(estimation_names[which(estimation_names==method)])
+  ES_summary$baseline <- paste0("F:", paste(FE_base, collapse = ""), 
+                                " R:", paste(RE_base, collapse = ""))
+  ES_summary$trt <- paste0("F:", paste(FE_trt, collapse = ""), 
+                           " R:", paste(RE_trt, collapse = ""))
   
   if (method=="RML" & design=="MB") {
     ES_summary$A <- A
@@ -128,7 +134,9 @@ summarize_ES <- function(res, filter_vars, filter_vals, design, method, A, B, co
   row.names(ES_summary) <- NULL
   names(ES_summary) <- c("BC-SMD estimate","Std. Error", CI_names,
                          "Degrees of freedom","Auto-correlation","Intra-class correlation",
-                         "Study design","Estimation method","Initial treatment time","Follow-up time")
+                         "Study design","Estimation method",
+                         "Baseline specification", "Treatment specification",
+                         "Initial treatment time","Follow-up time")
   
   if (!is.null(filter_vals)) {
     filter_vals <- lapply(filter_vals, paste, sep = ", ")
