@@ -15,15 +15,23 @@
 #' as described in Hedges, Pustejovsky, and Shadish (2012).
 #' }
 #' 
-#' The package also includes the data used in the examples from each paper, as well as a few other datasets: 
+#' The package also includes the data used in the examples from each paper, as well as several other datasets: 
 #' \itemize{
-#' \item \code{\link{Lambert}}
+#' \item \code{\link{AlberMorgan}}
 #' \item \code{\link{Anglesea}}
-#' \item \code{\link{Saddler}}
-#' \item \code{\link{Laski}}
-#' \item \code{\link{Schutte}}
-#' \item \code{\link{Thorne}}
+#' \item \code{\link{BartonArwood}}
+#' \item \code{\link{Bryant2018}}
 #' \item \code{\link{Carson}}
+#' \item \code{\link{Lambert}}
+#' \item \code{\link{Laski}}
+#' \item \code{\link{Musser}}
+#' \item \code{\link{Rodriguez}}
+#' \item \code{\link{Ruiz}}
+#' \item \code{\link{Saddler}}
+#' \item \code{\link{Schutte}}
+#' \item \code{\link{Thiemann2001}}
+#' \item \code{\link{Thiemann2004}}
+#' \item \code{\link{Thorne}}
 #' }
 #' 
 #' @author James E. Pustejovsky <jepusto@@gmail.com>
@@ -129,7 +137,6 @@ NULL
 
 NULL
 
-
 #' Example 2 from Hedges, Pustejovsky, & Shadish (2013)
 #' 
 #' Data from a multiple baseline design conducted by 
@@ -187,9 +194,9 @@ NULL
 #' Data from an ABAB design conducted by Thorne and Kamps (2008). The variables are as follows:
 #' \itemize{
 #'   \item \code{case}. Participant identifier.  
-#'   \item \code{outcome_desc}. Outcome measure description (academic engagement or inappropriate verbalizations). 
+#'   \item \code{measure}. Outcome measure description (academic engagement or inappropriate verbalizations). 
 #'   \item \code{session}. Measurement occasion.
-#'   \item \code{phase_id}. Factor descibing the phase of the study design for each case.
+#'   \item \code{phase_id}. Factor describing the phase of the study design for each case.
 #'   \item \code{phase_indicator}. Indicator variable equal to 1 during intervention phases.
 #'   \item \code{outcome}. Outcome scores
 #' }
@@ -209,7 +216,7 @@ NULL
 #' \itemize{ 
 #'    \item \code{case} Participant identifier 
 #'    \item \code{treatment} Factor describing the treatment condition
-#'    \item \code{phase} Numeric descibing the phase of the study design for each case 
+#'    \item \code{phase} Numeric describing the phase of the study design for each case 
 #'    \item \code{outcome} Outcome scores 
 #'    \item \code{time} Measurement occasion 
 #' }
@@ -224,7 +231,6 @@ NULL
 #'   Journal of Special Needs Education, 23}, 269-279. 
 #'   
 NULL
-
 
 #' Musser (2001)
 #' 
@@ -311,12 +317,162 @@ NULL
 #'   
 NULL
 
+#' Alber-Morgan, et al. (2007)
+#' 
+#' Data from a multiple baseline design conducted by Alber-Morgan, Ramp,
+#' Anderson, & Martin (2007). The variables are as follows: \itemize{ \item
+#' \code{case} Participant identifier \item \code{condition} Factor identifying
+#' the phase of the design (baseline or treatment) \item \code{session}
+#' Measurement occasion \item \code{outcome} Number of words read correctly per
+#' minute }
+#' 
+#' @docType data
+#' @keywords datasets
+#' @format A data frame with 119 rows and 4 variables
+#' @name AlberMorgan
+#' @source Alber-Morgan, S. R., Ramp, E. M., Anderson, L. L., & Martin, C. M.
+#'   (2007). Effects of repeated readings, error correction, and performance
+#'   feedback on the fluency and comprehension of middle school students with
+#'   behavior problems. Journal of Special Education, 41(1), 17-30.
+#'   doi:\href{http://dx.doi.org/10.1177/00224669070410010201}{10.1177/00224669070410010201}
+#'   
+#'   
+NULL
 
 
+#' Salazar, et al. (2020)
+#' 
+#' Data from a multiple baseline design conducted by Salazar, Ruiz,
+#' Ramírez1, &  Cardona-Betancourt (2020). The variables are as follows:
+#' \itemize{
+#'   \item \code{case}. Participant identifier.
+#'   \item \code{measure}. Outcome measure description (AFQ-Y, PTQ-C, or GPQ-C).
+#'   \item \code{treatment} Factor indicating baseline, treatment, post, or follow-up phase.
+#'   \item \code{time}. Measurement occasion.
+#'   \item \code{outcome}. Outcome scores.
+#' }
+#' 
+#' @docType data
+#' @keywords datasets
+#' @format A data frame with 324 rows and 5 variables
+#' @name Salazar
+#' 
+#' @source Salazar, D., Ruiz, F., Ramírez, E., & Cardona-Betancourt, V. (2020).
+#'   Acceptance and Commitment Therapy Focused on Repetitive Negative Thinking for
+#'   Child Depression: A Randomized Multiple-Baseline Evaluation. The Psychological
+#'   Record. doi:\href{https://doi.org/10.1007/s40732-019-00362-5}{10.1007/s40732-019-00362-5}
+#'
+NULL
+
+#' Bryant et al. (2018)
+#'
+#' Data from a multiple baseline across clusters design conducted by
+#' Bryant et al. (2018). The variables are as follows:
+#' \itemize{
+#'   \item \code{Study_ID}. Study identifier.
+#'   \item \code{school}. School identifier.
+#'   \item \code{case}. Student identifier.
+#'   \item \code{treatment}. Indicator for treatment phase.
+#'   \item \code{session}. Measurement occasion.
+#'   \item \code{session_trt}. Measurement occasion times treatment phase.
+#'   \item \code{outcome}. Texas Early Mathematics Inventory (TEMI-Aim Check) scores.
+#'   \item \code{session_c}. Measurement occasion centered at the follow-up time.
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @format A data frame with 536 rows and 8 variables
+#' @name Bryant2018
+#' @source Bryant, D. R., Bryant, B. R., Sorelle-Miner, D. A., Falcomata, T. S.
+#' & Nozari, M. (2018).
+#' Tier 3 intensified intervention for second grade students with severe
+#' mathematics difficulties. \emph{Archives of Psychology, 2}(11), 1-24.
+#' doi:\href{https://doi.org/10.31296/aop.v2i11.86}{10.31296/aop.v2i11.86}
+#'
+NULL
+
+#' Thiemann & Goldstein (2001)
+#'
+#' Data from a multiple baseline across behaviors design conducted by
+#' Thiemann & Goldstein (2001). The variables are as follows:
+#' \itemize{
+#'   \item \code{Study_ID}. Study identifier.
+#'   \item \code{case}. Student identifier.
+#'   \item \code{series}. Series identifier.
+#'   \item \code{outcome}. Frequency of coded social communication skills, as measured by
+#'   a direct observation coding system with 15-second intervals recoding for the occurrence
+#'   of any of the four social measures: contingent responses, securing attention, initiating
+#'   comments, and initiating requests.
+#'   \item \code{time}. Measurement occasion.
+#'   \item \code{treatment}. Indicator for treatment phase.
+#'   \item \code{trt_time}. Measurement occasion times treatment phase.
+#'   \item \code{time_c}. Measurement occasion centered at the follow-up time.
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @format A data frame with 221 rows and 8 variables
+#' @name Thiemann2001
+#' @source Thiemann, K.S., & Goldstein, H. (2001).
+#' Social stories, written text cues, and video feedback: effects on social communication
+#' of children with Autism. \emph{Journal of Applied Behavior Analysis, 34}(4), 425-446.
+#' doi:\href{http://doi.org/10.1901/jaba.2001.34-425}{10.1901/jaba.2001.34-425}
+#'
+NULL
+
+#' Ruiz, et al. (2020)
+#' 
+#' Data from a multiple baseline design conducted by  Ruiz,
+#' Luciano, Florez, Suarez-Falcon, &  Cardona-Betancourt (2020). The variables are as follows:
+#' \itemize{
+#'   \item \code{case}. Participant identifier.
+#'   \item \code{measure}. Outcome measure description (AAQ-II, ANXIETY, CFQ, DASS-TOTAL, DEPRESSION, PSWQ, PTQ, STRESS, VQ-OBSTRUCTION, or VQ-PROGRESS).
+#'   \item \code{treatment} Factor indicating baseline, treatment, post, or follow-up phase.
+#'   \item \code{time}. Measurement occasion.
+#'   \item \code{outcome}. Outcome scores.
+#' }
+#' 
+#' @docType data
+#' @keywords datasets
+#' @format A data frame with 840 rows and 5 variables
+#' @name Ruiz
+#' 
+#' @source Ruiz, F., Luciano, C., Florez, C., Suarez-Falcon, J., & Cardona-Betancourt, V. (2020).
+#'   A Multiple-Baseline Evaluation of Acceptance and Commitment Therapy Focused on Repetitive Negative 
+#'   Thinking for Comorbid Generalized Anxiety Disorder and Depression. Frontiers in Psychology, 11. 
+#'   doi: \href{https://doi.org/10.3389/fpsyg.2020.00356}{10.3389/fpsyg.2020.00356}
+#'
+#'
+NULL
 
 
-
-
+#' Thiemann & Goldstein (2004)
+#'
+#' Data from a multiple baseline across behaviors design conducted by
+#' Thiemann & Goldstein (2004). The variables are as follows:
+#' \itemize{
+#'   \item \code{Study_ID}. Study identifier.
+#'   \item \code{case}. Student identifier.
+#'   \item \code{series}. Series identifier.
+#'   \item \code{outcome}. Frequency of unprompted targeted social communication skills,
+#'   as measured by a direct observation, paper and pencil coding system during the 10-minute
+#'   social activity for each behavior for all sessions.
+#'   \item \code{time}. Measurement occasion.
+#'   \item \code{treatment}. Indicator for treatment phase.
+#'   \item \code{trt_time}. Measurement occasion times treatment phase.
+#'   \item \code{time_c}. Measurement occasion centered at the follow-up time.
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @format A data frame with 408 rows and 8 variables
+#' @name Thiemann2004
+#' @source Thiemann, K.S., & Goldstein, H. (2004).
+#' Effects of peer training and written text cueing on social communication of
+#' school-age children with pervasive developmental disorder. \emph{Journal of Speech Language 
+#' and Hearing Research, 47}(1), 126-144. doi:\href{https://doi.org/10.1044/1092-4388(2004/012)}{10.1044/1092-4388(2004/012)}
+#'
+NULL
 
 
 #--------------------------

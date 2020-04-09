@@ -4,7 +4,9 @@
 \name{MB1results}
 \alias{MB1results}
 \title{MB1 simulation results}
-\format{A data frame}
+\format{
+A data frame
+}
 \description{
 Simulation results for model MB1 from  Pustejovsky, Hedges, & Shadish (2014).
 }
@@ -14,4 +16,3 @@ Design-comparable effect sizes in multiple baseline designs: A general modeling 
 \emph{Journal of Educational and Behavioral Statistics, 39}(4), 211-227. doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
 }
 \keyword{datasets}
-

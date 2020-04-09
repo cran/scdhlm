@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,54 +12,287 @@
 
 <meta name="author" content="James E. Pustejovsky" />
 
-<meta name="date" content="2016-12-20" />
+<meta name="date" content="2020-04-08" />
 
 <title>Estimating design-comparable standardized mean differences with scdhlm</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -69,14 +302,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Estimating design-comparable standardized mean differences with scdhlm</h1>
-<h4 class="author"><em>James E. Pustejovsky</em></h4>
-<h4 class="date"><em>2016-12-20</em></h4>
+<h4 class="author">James E. Pustejovsky</h4>
+<h4 class="date">2020-04-08</h4>
 
 
 
 <p>The scdhlm package (Pustejovsky, 2016) provides several methods for estimating design-comparable standardized mean differences (SMDs) based on data from a single-case design. A design-comparable SMD is in the same metric as the SMD from a simple, between-groups randomized experiment performed on a comparable sample and with comparable outcome measures. Hedges, Pustejovsky, and Shadish (2012) proposed methods for estimating design-comparable SMDs based on data from an ABAB design (and, more generally, treatment reversal designs with an arbitrary number of phases); Hedges, Pustejovsky, and Shadish (2013) extended the methods to handle data from multiple baseline designs. In both cases, the proposed estimation methods are premised on a simple model for the data, which assumed that the outcome process is stable over time (lacking time trends) and that the treatment effect is constant across cases. Pustejovsky, Hedges, and Shadish (2014) proposed an approach to defining and estimating design-comparable SMDs under a more general model, which can allow for time trends and between-case variability.</p>
-<p>The original estimation methods proposed for the ABAB design and multiple baseline design are implemented in the <code>effect_size_ABk</code> and <code>effect_size_MB</code> functions, respectively. Both of these functions take the raw data as input and produce as output an effect size estimate, along with accompanying standard error and some other auxilliary information. Thus, there is no distinction between estimating the model and estimating the effect size. In contrast, the more general methods proposed in Pustejovsky, Hedges, and Shadish (2014) entail two steps: first, estimating a hierarchical model for the data; second, estimating a design-comparable effect size based on the fitted model. The first step is accomplished using the function <code>lme</code> from the package <code>nlme</code> by Pinheiro, Bates, DebRoy, and Sarkar (2015). The second step is accomplished using the function <code>g_REML</code> from the <code>scdhlm</code> package. This vignette demonstrates how to use all of these functions to estimate design-comparable standardized mean difference effect sizes. The R presented below can be used to replicate the examples found in the papers that proposed the methods. To begin, the user must load the package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scdhlm)</code></pre></div>
+<p>The original estimation methods proposed for the ABAB design and multiple baseline design are implemented in the <code>effect_size_ABk</code> and <code>effect_size_MB</code> functions, respectively. Both of these functions take the raw data as input and produce as output an effect size estimate, along with accompanying standard error and some other auxiliary information. Thus, there is no distinction between estimating the model and estimating the effect size. In contrast, the more general methods proposed in Pustejovsky, Hedges, and Shadish (2014) entail two steps: first, estimating a hierarchical model for the data; second, estimating a design-comparable effect size based on the fitted model. The first step is accomplished using the function <code>lme</code> from the package <code>nlme</code> by Pinheiro, Bates, DebRoy, and Sarkar (2015). The second step is accomplished using the function <code>g_REML</code> from the <code>scdhlm</code> package. This vignette demonstrates how to use all of these functions to estimate design-comparable standardized mean difference effect sizes. The R presented below can be used to replicate the examples found in the papers that proposed the methods. To begin, the user must load the package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(scdhlm)</a></code></pre></div>
 <div id="lambert-cartledge-heward-lo-2006" class="section level2">
 <h2>Lambert, Cartledge, Heward, &amp; Lo (2006)</h2>
 <p>Lambert, Cartledge, Heward, and Lo (2006) tested the effect of using response cards (compared to single-student responding) during math lessons in two fourth-grade classrooms. The investigators collected data on rates of disruptive behavior for nine focal students, using an ABAB design. This example is discussed in Hedges, Pustejovsky, and Shadish (2012), who selected it because the design was close to balanced and used a relatively large number of cases. Their calculations can be replicated using the <code>effect_size_ABk</code> function. To use this function, the user must provide five pieces of data:</p>
@@ -88,10 +321,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>a variable listing the session number.</li>
 </ul>
 <p>In the <code>Lambert</code> dataset, these variables are called respectively <code>outcome</code>, <code>treatment</code>, <code>case</code>, <code>phase</code>, and <code>time</code>. Given these inputs, the design-comparable SMD is calculated as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Lambert)
-Lambert_ES &lt;-<span class="st"> </span><span class="kw">with</span>(Lambert, <span class="kw">effect_size_ABk</span>(<span class="dt">outcome =</span> outcome, <span class="dt">treatment =</span> treatment, 
-                                            <span class="dt">id =</span> case, <span class="dt">phase =</span> phase, <span class="dt">time =</span> time))
-<span class="kw">str</span>(Lambert_ES)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">data</span>(Lambert)</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3">Lambert_ES &lt;-<span class="st"> </span><span class="kw">effect_size_ABk</span>(<span class="dt">outcome =</span> outcome, <span class="dt">treatment =</span> treatment, </a>
+<a class="sourceLine" id="cb2-4" title="4">                                            <span class="dt">id =</span> case, <span class="dt">phase =</span> phase, <span class="dt">time =</span> time, <span class="dt">data=</span> Lambert)</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="kw">str</span>(Lambert_ES)</a></code></pre></div>
 <pre><code>## List of 12
 ##  $ M_a            : int [1:2, 1:2] 6 4 6 7
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 2
@@ -109,11 +344,11 @@ Lambert_ES &lt;-<span class="st"> </span><span class="kw">with</span>(Lambert, <
 ##  $ delta_hat      : num -2.51
 ##  $ V_delta_hat    : num 0.0405
 ##  - attr(*, &quot;class&quot;)= chr &quot;g_HPS&quot;</code></pre>
-<p>The function produces a list containing the estimated effect size estimate, an estimate of its variance, and several pieces of auxilliary information. The effect size estimate is stored in the list entry called <code>delta_hat</code>, which in this example is equal to -2.5130728; its variance is stored in <code>V_delta_hat</code>, which in this example is equal to 0.0405462. The effect size estimate is bias-corrected in a manner analogous to the correction in Hedges’ g for SMDs from a between-subjects design. The degrees of freedom are estimated based on a Satterthwaite-type approximation and are stored in the entry <code>nu</code> (equal to 164.4922707 in this example).</p>
-<p>By default, the <code>effect_size_ABk</code> function calculates an estimate of the first-order autocorrelation in the outcome series (stored in the entry <code>phi</code>) and an estimate of the intra-class correlation, i.e., the ratio of the between-case variance in the outcome to the total cross-sectional variance in the outcome (the intra-class correlation estimate is stored in the entry <code>rho</code>). Optionally, the user can specify their own estimates of these parameters as inputs to the function. In this example, the auto-correlation estimated was . The following code examines the sensitivity of the results to values of the auto-correlation that are larger and smaller than the default estimate of 0.2246802.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">with</span>(Lambert, <span class="kw">effect_size_ABk</span>(<span class="dt">outcome =</span> outcome, <span class="dt">treatment =</span> treatment, 
-                              <span class="dt">id =</span> case, <span class="dt">phase =</span> phase, <span class="dt">time =</span> time, 
-                              <span class="dt">phi =</span> <span class="fl">0.10</span>))[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</code></pre></div>
+<p>The function produces a list containing the estimated effect size estimate, an estimate of its variance, and several pieces of auxiliary information. The effect size estimate is stored in the list entry called <code>delta_hat</code>, which in this example is equal to -2.5130728; its variance is stored in <code>V_delta_hat</code>, which in this example is equal to 0.0405462. The effect size estimate is bias-corrected in a manner analogous to the correction in Hedges’ g for SMDs from a between-subjects design. The degrees of freedom are estimated based on a Satterthwaite-type approximation and are stored in the entry <code>nu</code> (equal to 164.4922707 in this example).</p>
+<p>By default, the <code>effect_size_ABk</code> function calculates an estimate of the first-order autocorrelation in the outcome series (stored in the entry <code>phi</code>) and an estimate of the intra-class correlation, i.e., the ratio of the between-case variance in the outcome to the total cross-sectional variance in the outcome (the intra-class correlation estimate is stored in the entry <code>rho</code>). Optionally, the user can specify their own estimates of these parameters as inputs to the function. In this example, the auto-correlation estimated was 0.2246802. The following code examines the sensitivity of the results to values of the auto-correlation that are larger and smaller than the default estimate of 0.2246802.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">effect_size_ABk</span>(<span class="dt">outcome =</span> outcome, <span class="dt">treatment =</span> treatment, </a>
+<a class="sourceLine" id="cb4-2" title="2">                              <span class="dt">id =</span> case, <span class="dt">phase =</span> phase, <span class="dt">time =</span> time, <span class="dt">data=</span> Lambert,</a>
+<a class="sourceLine" id="cb4-3" title="3">                              <span class="dt">phi =</span> <span class="fl">0.10</span>)[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</a></code></pre></div>
 <pre><code>## $delta_hat
 ## [1] -2.512654
 ## 
@@ -122,9 +357,9 @@ Lambert_ES &lt;-<span class="st"> </span><span class="kw">with</span>(Lambert, <
 ## 
 ## $nu
 ## [1] 158.7306</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">with</span>(Lambert, <span class="kw">effect_size_ABk</span>(<span class="dt">outcome =</span> outcome, <span class="dt">treatment =</span> treatment, 
-                              <span class="dt">id =</span> case, <span class="dt">phase =</span> phase, <span class="dt">time =</span> time, 
-                              <span class="dt">phi =</span> <span class="fl">0.35</span>))[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">effect_size_ABk</span>(<span class="dt">outcome =</span> outcome, <span class="dt">treatment =</span> treatment, </a>
+<a class="sourceLine" id="cb6-2" title="2">                              <span class="dt">id =</span> case, <span class="dt">phase =</span> phase, <span class="dt">time =</span> time, <span class="dt">data=</span> Lambert,</a>
+<a class="sourceLine" id="cb6-3" title="3">                              <span class="dt">phi =</span> <span class="fl">0.35</span>)[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</a></code></pre></div>
 <pre><code>## $delta_hat
 ## [1] -2.512171
 ## 
@@ -138,9 +373,9 @@ Lambert_ES &lt;-<span class="st"> </span><span class="kw">with</span>(Lambert, <
 <div id="anglesea-hoch-taylor-2008" class="section level2">
 <h2>Anglesea, Hoch, &amp; Taylor (2008)</h2>
 <p>Anglesea, Hoch, and Taylor (2008) used an ABAB design to test the effect of using a pager prompt to reduce the rapid eating of three teenage boys with autism. The primary outcome was a measure of how quickly each participant consumed one serving of a familiar food. This example is discussed in Hedges, Pustejovsky, and Shadish (2012), who used it to illustrate the calculation of the design-comparable SMD when based on the minimum required number of cases. Their calculations can be replicated using the following code:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Anglesea)
-Anglesea_ES &lt;-<span class="st"> </span><span class="kw">with</span>(Anglesea, <span class="kw">effect_size_ABk</span>(outcome, condition, case, phase, session))
-Anglesea_ES[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">data</span>(Anglesea)</a>
+<a class="sourceLine" id="cb8-2" title="2">Anglesea_ES &lt;-<span class="st"> </span><span class="kw">effect_size_ABk</span>(outcome, condition, case, phase, session, <span class="dt">data =</span> Anglesea)</a>
+<a class="sourceLine" id="cb8-3" title="3">Anglesea_ES[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</a></code></pre></div>
 <pre><code>## $delta_hat
 ## [1] 1.149507
 ## 
@@ -155,30 +390,27 @@ Anglesea_ES[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</sp
 <h2>Saddler, Behforooz, &amp; Asaro (2008)</h2>
 <p>Saddler, Behforooz, and Asaro (2008) used a multiple baseline design to investigate the effect of an instructional technique on the writing of fourth grade students. The investigators assessed the intervention’s effect on measures of writing quality, sentence complexity, and use of target constructions.</p>
 <p>Design-comparable SMDs can be estimated based on these data using the <code>effect_size_MB</code> function. The syntax for this function is similar to that of the <code>effect_size_ABk</code> function, but does not require the user to input information about the phase of the design (because in the multiple baseline design, phase exactly corresponds to treatment condition). The following code replicates the calculations reported in Hedges, Pustejovsky, and Shadish (2013):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Saddler)
-
-quality_ES &lt;-<span class="st"> </span><span class="kw">with</span>(<span class="kw">subset</span>(Saddler, measure==<span class="st">&quot;writing quality&quot;</span>), 
-                   <span class="kw">effect_size_MB</span>(outcome, treatment, case, time))
-complexity_ES &lt;-<span class="st"> </span><span class="kw">with</span>(<span class="kw">subset</span>(Saddler, measure==<span class="st">&quot;T-unit length&quot;</span>), 
-                      <span class="kw">effect_size_MB</span>(outcome, treatment, case, time))
-construction_ES &lt;-<span class="st"> </span><span class="kw">with</span>(<span class="kw">subset</span>(Saddler, measure==<span class="st">&quot;number of constructions&quot;</span>), 
-                        <span class="kw">effect_size_MB</span>(outcome, treatment, case, time))
-
-<span class="kw">cbind</span>(<span class="dt">quality =</span> <span class="kw">unlist</span>(quality_ES), 
-      <span class="dt">complexity =</span> <span class="kw">unlist</span>(complexity_ES), 
-      <span class="dt">construction =</span> <span class="kw">unlist</span>(construction_ES))[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>,<span class="st">&quot;phi&quot;</span>,<span class="st">&quot;rho&quot;</span>),]</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">data</span>(Saddler)</a>
+<a class="sourceLine" id="cb10-2" title="2"></a>
+<a class="sourceLine" id="cb10-3" title="3">quality_ES &lt;-<span class="st"> </span><span class="kw">effect_size_MB</span>(outcome, treatment, case, time, <span class="dt">data=</span> <span class="kw">subset</span>(Saddler, measure<span class="op">==</span><span class="st">&quot;writing quality&quot;</span>))</a>
+<a class="sourceLine" id="cb10-4" title="4">complexity_ES &lt;-<span class="st"> </span><span class="kw">effect_size_MB</span>(outcome, treatment, case, time , <span class="dt">data=</span> <span class="kw">subset</span>(Saddler, measure<span class="op">==</span><span class="st">&quot;T-unit length&quot;</span>))</a>
+<a class="sourceLine" id="cb10-5" title="5">construction_ES &lt;-<span class="st"> </span><span class="kw">effect_size_MB</span>(outcome, treatment, case, time, <span class="dt">data=</span> <span class="kw">subset</span>(Saddler, measure<span class="op">==</span><span class="st">&quot;number of constructions&quot;</span>))</a>
+<a class="sourceLine" id="cb10-6" title="6"></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="kw">cbind</span>(<span class="dt">quality =</span> <span class="kw">unlist</span>(quality_ES), </a>
+<a class="sourceLine" id="cb10-8" title="8">      <span class="dt">complexity =</span> <span class="kw">unlist</span>(complexity_ES), </a>
+<a class="sourceLine" id="cb10-9" title="9">      <span class="dt">construction =</span> <span class="kw">unlist</span>(construction_ES))[<span class="kw">c</span>(<span class="st">&quot;delta_hat&quot;</span>,<span class="st">&quot;V_delta_hat&quot;</span>,<span class="st">&quot;nu&quot;</span>,<span class="st">&quot;phi&quot;</span>,<span class="st">&quot;rho&quot;</span>),]</a></code></pre></div>
 <pre><code>##                quality  complexity construction
 ## delta_hat   1.96307272  0.78540043   0.74755356
 ## V_delta_hat 0.33491289  0.08023320   0.07847359
 ## nu          8.91814603  9.60204004   7.57981360
 ## phi         0.09965017 -0.07542229  -0.11159420
 ## rho         0.63321198  0.61453091   0.73123744</code></pre>
-<p>For multiple baseline designs, an alternative to using the <code>effect_size_MB</code> function is to estimate a hierarchical linear model for the data and then use the <code>g_REML</code> function. The two alternative approaches differ in how the model parameters and effect size are estimated. Pustejovsky, Hedges, and Shadish (2014) found that the latter approach (based on a heirarchical linear model) has comparable mean-squared error to the former approach, while producing better estimates of the variance of the effect size. The latter approach is implemented in two steps, which will be demonstrated using the writing quality measure. First, estimate the hierarchical model with an AR(1) within-case error structure using the <code>lme</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quality_RML &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> outcome ~<span class="st"> </span>treatment, 
-                   <span class="dt">random =</span> ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>case, 
-                   <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, ~<span class="st"> </span>time |<span class="st"> </span>case), 
-                   <span class="dt">data =</span> <span class="kw">subset</span>(Saddler, measure==<span class="st">&quot;writing quality&quot;</span>))
-<span class="kw">summary</span>(quality_RML)</code></pre></div>
+<p>For multiple baseline designs, an alternative to using the <code>effect_size_MB</code> function is to estimate a hierarchical linear model for the data and then use the <code>g_REML</code> function. The two alternative approaches differ in how the model parameters and effect size are estimated. Pustejovsky, Hedges, and Shadish (2014) found that the latter approach (based on a hierarchical linear model) has comparable mean-squared error to the former approach, while producing better estimates of the variance of the effect size. The latter approach is implemented in two steps, which will be demonstrated using the writing quality measure. First, estimate the hierarchical model with an AR(1) within-case error structure using the <code>lme</code> function:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">quality_RML &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> outcome <span class="op">~</span><span class="st"> </span>treatment, </a>
+<a class="sourceLine" id="cb12-2" title="2">                   <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>case, </a>
+<a class="sourceLine" id="cb12-3" title="3">                   <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>case), </a>
+<a class="sourceLine" id="cb12-4" title="4">                   <span class="dt">data =</span> <span class="kw">subset</span>(Saddler, measure<span class="op">==</span><span class="st">&quot;writing quality&quot;</span>))</a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="kw">summary</span>(quality_RML)</a></code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
 ##  Data: subset(Saddler, measure == &quot;writing quality&quot;) 
 ##        AIC      BIC    logLik
@@ -209,9 +441,9 @@ construction_ES &lt;-<span class="st"> </span><span class="kw">with</span>(<span
 ## Number of Observations: 41
 ## Number of Groups: 6</code></pre>
 <p>The summary of the fitted model displays estimates of the component parameters, including the within-case and between-case standard deviations, auto-correlation, and (unstandardized) treatment effect estimate. The next step is to combine these estimated components into an effect size estimate using the <code>g_REML</code> function. This function takes the fitted <code>lme</code> model object as input, followed by the vectors <code>p_const</code> and <code>r_const</code>, which specify the components of the fixed effects and variance estimates that are to be used in constructing the design-comparable SMD. For details on how to choose these constants, see Pustejovsky, Hedges, and Shadish (2014). In this example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quality_ES_RML &lt;-<span class="st"> </span><span class="kw">g_REML</span>(quality_RML, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), 
-                         <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">returnModel=</span><span class="ot">FALSE</span>)
-<span class="kw">str</span>(quality_ES_RML)</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">quality_ES_RML &lt;-<span class="st"> </span><span class="kw">g_REML</span>(quality_RML, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb14-2" title="2">                         <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">returnModel=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb14-3" title="3"><span class="kw">str</span>(quality_ES_RML)</a></code></pre></div>
 <pre><code>## List of 14
 ##  $ p_beta   : num 2.18
 ##  $ r_theta  : num 0.882
@@ -229,23 +461,23 @@ construction_ES &lt;-<span class="st"> </span><span class="kw">with</span>(<span
 ##  $ p_const  : num [1:2] 0 1
 ##  $ r_const  : num [1:3] 1 0 1
 ##  - attr(*, &quot;class&quot;)= chr &quot;g_REML&quot;</code></pre>
-<p>The function returns a list containing the SMD effect size estimate (<code>g_AB</code> = 2.1741543), its variance (<code>V_g_AB</code> = 0.3106349), the estimated auto-correlation (<code>phi</code> = 0.3819756), estimated degrees of freedom (<code>nu</code> = 11.9634199), and several other pieces of auxilliary information. In this example, the RML effect size estimate is about 10% larger than the estimate from <code>effect_size_MB</code>, with a slightly smaller variance estimate. The RML estimate of the auto-correlation is substantially higher than before, but <code>effect_size_MB</code> uses a moment estimator that is known to be biased towards zero and that does not perform well when outcomes are intermittently missing for some sessions (as is the case here).</p>
+<p>The function returns a list containing the SMD effect size estimate (<code>g_AB</code> = 2.1741543), its variance (<code>V_g_AB</code> = 0.3106349), the estimated auto-correlation (<code>phi</code> = 0.3819756), estimated degrees of freedom (<code>nu</code> = 11.9634199), and several other pieces of auxiliary information. In this example, the RML effect size estimate is about 10% larger than the estimate from <code>effect_size_MB</code>, with a slightly smaller variance estimate. The RML estimate of the auto-correlation is substantially higher than before, but <code>effect_size_MB</code> uses a moment estimator that is known to be biased towards zero and that does not perform well when outcomes are intermittently missing for some sessions (as is the case here).</p>
 </div>
 <div id="laski-charlop-schreibman-1988" class="section level2">
 <h2>Laski, Charlop, &amp; Schreibman (1988)</h2>
 <p>Laski, Charlop, and Schreibman (1988) used a multiple baseline across individuals to evaluate the effect of a training program for parents on the speech production of their autistic children, as measured using a partial interval recording procedure. The design included <span class="math inline">\(m = 8\)</span> children; one child was measured separately with each parent; for purposes of simplicity, and following Hedges, Pustejovsky, and Shadish (2013), only the measurements taken with the mother are included in the analysis.</p>
 <p>The following code compares the estimates of the design-comparable SMD effect size based on the Hedges, Pustejovsky, and Shadish (2013) approach (using the <code>effect_size_MB</code> function) to the estimates based on the hierarchical linear modeling approach described in Pustejovsky, Hedges, and Shadish (2014) (using the <code>g_REML</code> function).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Laski)
-
-<span class="co"># Hedges, Pustejovsky, &amp; Shadish (2013)</span>
-Laski_ES_HPS &lt;-<span class="st"> </span><span class="kw">with</span>(Laski, <span class="kw">effect_size_MB</span>(outcome, treatment, case, time))
-
-<span class="co"># Pustejovsky, Hedges, &amp; Shadish (2014)</span>
-Laski_RML &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> outcome ~<span class="st"> </span>treatment,
-                 <span class="dt">random =</span> ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>case, 
-                 <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, ~<span class="st"> </span>time |<span class="st"> </span>case), 
-                 <span class="dt">data =</span> Laski)
-<span class="kw">summary</span>(Laski_RML)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">data</span>(Laski)</a>
+<a class="sourceLine" id="cb16-2" title="2"></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="co"># Hedges, Pustejovsky, &amp; Shadish (2013)</span></a>
+<a class="sourceLine" id="cb16-4" title="4">Laski_ES_HPS &lt;-<span class="st"> </span><span class="kw">effect_size_MB</span>(outcome, treatment, case, time, <span class="dt">data=</span> Laski)</a>
+<a class="sourceLine" id="cb16-5" title="5"></a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="co"># Pustejovsky, Hedges, &amp; Shadish (2014)</span></a>
+<a class="sourceLine" id="cb16-7" title="7">Laski_RML &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> outcome <span class="op">~</span><span class="st"> </span>treatment,</a>
+<a class="sourceLine" id="cb16-8" title="8">                 <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>case, </a>
+<a class="sourceLine" id="cb16-9" title="9">                 <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>case), </a>
+<a class="sourceLine" id="cb16-10" title="10">                 <span class="dt">data =</span> Laski)</a>
+<a class="sourceLine" id="cb16-11" title="11"><span class="kw">summary</span>(Laski_RML)</a></code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
 ##  Data: Laski 
 ##        AIC      BIC    logLik
@@ -275,12 +507,12 @@ Laski_RML &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class=
 ## 
 ## Number of Observations: 128
 ## Number of Groups: 8</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Laski_ES_RML &lt;-<span class="st"> </span><span class="kw">g_REML</span>(Laski_RML, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),
-                       <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">returnModel=</span><span class="ot">FALSE</span>)
-
-<span class="co"># compare the estimates</span>
-<span class="kw">cbind</span>(<span class="dt">HPS =</span> <span class="kw">with</span>(Laski_ES_HPS, <span class="kw">c</span>(<span class="dt">SMD =</span> delta_hat, <span class="dt">Variance =</span> V_delta_hat, <span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho, <span class="dt">nu =</span> nu)),
-      <span class="dt">RML =</span> <span class="kw">with</span>(Laski_ES_RML, <span class="kw">c</span>(g_AB, V_g_AB, phi, Tau /<span class="st"> </span>(Tau +<span class="st"> </span>sigma_sq), nu)))</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">Laski_ES_RML &lt;-<span class="st"> </span><span class="kw">g_REML</span>(Laski_RML, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb18-2" title="2">                       <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">returnModel=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb18-3" title="3"></a>
+<a class="sourceLine" id="cb18-4" title="4"><span class="co"># compare the estimates</span></a>
+<a class="sourceLine" id="cb18-5" title="5"><span class="kw">cbind</span>(<span class="dt">HPS =</span> <span class="kw">with</span>(Laski_ES_HPS, <span class="kw">c</span>(<span class="dt">SMD =</span> delta_hat, <span class="dt">Variance =</span> V_delta_hat, <span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho, <span class="dt">nu =</span> nu)),</a>
+<a class="sourceLine" id="cb18-6" title="6">      <span class="dt">RML =</span> <span class="kw">with</span>(Laski_ES_RML, <span class="kw">c</span>(g_AB, V_g_AB, phi, Tau <span class="op">/</span><span class="st"> </span>(Tau <span class="op">+</span><span class="st"> </span>sigma_sq), nu)))</a></code></pre></div>
 <pre><code>##                  HPS         RML
 ## SMD       1.38838504  1.40488723
 ## Variance  0.10050132  0.08198192
@@ -289,11 +521,11 @@ Laski_RML &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class=
 ## nu       13.10041496 18.55240610</code></pre>
 <p>As in the Saddler example, both methods produce very similar SMD estimates and variance estimates. The RML estimate of auto-correlation is substantially higher than the HPS estimate, while the intra-class correlation estimate is somewhat lower; in combination, these differences lead to larger degrees of freedom.</p>
 <p>An advantage of the RML approach is that it is readily extended to more complex models. The above analysis was based on the assumption that the treatment effect is constant across cases. This assumption can be removed by fitting a model that includes a random treatment effect for each case.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Laski_RML2 &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> outcome ~<span class="st"> </span>treatment,
-                 <span class="dt">random =</span> ~<span class="st"> </span>treatment |<span class="st"> </span>case, 
-                 <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, ~<span class="st"> </span>time |<span class="st"> </span>case), 
-                 <span class="dt">data =</span> Laski)
-<span class="kw">summary</span>(Laski_RML2)</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">Laski_RML2 &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> outcome <span class="op">~</span><span class="st"> </span>treatment,</a>
+<a class="sourceLine" id="cb20-2" title="2">                 <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span>treatment <span class="op">|</span><span class="st"> </span>case, </a>
+<a class="sourceLine" id="cb20-3" title="3">                 <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>case), </a>
+<a class="sourceLine" id="cb20-4" title="4">                 <span class="dt">data =</span> Laski)</a>
+<a class="sourceLine" id="cb20-5" title="5"><span class="kw">summary</span>(Laski_RML2)</a></code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
 ##  Data: Laski 
 ##        AIC      BIC    logLik
@@ -326,14 +558,14 @@ Laski_RML &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class=
 ## 
 ## Number of Observations: 128
 ## Number of Groups: 8</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(Laski_RML, Laski_RML2)</code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">anova</span>(Laski_RML, Laski_RML2)</a></code></pre></div>
 <pre><code>##            Model df      AIC      BIC    logLik   Test  L.Ratio p-value
 ## Laski_RML      1  5 1048.285 1062.466 -519.1424                        
 ## Laski_RML2     2  7 1036.014 1055.868 -511.0069 1 vs 2 16.27091   3e-04</code></pre>
 <p>The fit of the two models can be compared using a likelihood ratio test, which rejects the model with a constant treatment effect. The second model, which allows the treatment effect to vary, is to be preferred. The following code estimates a design-comparable SMD based on the better-fitting model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Laski_ES_RML2 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(Laski_RML2, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), 
-                        <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">returnModel=</span><span class="ot">FALSE</span>)
-Laski_ES_RML2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;phi&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">Laski_ES_RML2 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(Laski_RML2, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb24-2" title="2">                        <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">returnModel=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb24-3" title="3">Laski_ES_RML2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;phi&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</a></code></pre></div>
 <pre><code>## $g_AB
 ##          [,1]
 ## [1,] 1.180586
@@ -353,44 +585,44 @@ Laski_ES_RML2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>
 <div id="schutte-malouf-brown-2008" class="section level2">
 <h2>Schutte, Malouf, &amp; Brown (2008)</h2>
 <p>Schutte, Malouf, and Brown (2008) evaluated the effect of an emotion-focused therapy program for adults with prolonged fatigue using a multiple baseline across individuals. The design included 13 adults who met clinical criteria for prolonged fatigue. Fatigue severity was measured weekly using a self-reported scale that ranged from 1 to 63. Following Pustejovsky, Hedges, and Shadish (2014), the data for participant 4 are excluded from the analysis because nearly all of the measurements for this case are at the upper extreme of the scale. The data for the remaining participants are plotted below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Schutte)
-Schutte &lt;-<span class="st"> </span><span class="kw">subset</span>(Schutte, case !=<span class="st"> &quot;Case 4&quot;</span>)
-Schutte$case &lt;-<span class="st"> </span><span class="kw">factor</span>(Schutte$case)
-
-change &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">case=</span><span class="kw">unique</span>(Schutte$case),
-                     <span class="dt">phase.change =</span> <span class="kw">with</span>(<span class="kw">subset</span>(Schutte, treatment==<span class="st"> &quot;treatment&quot;</span>), 
-                                         <span class="kw">tapply</span>(week, case, min)) -<span class="st"> </span><span class="fl">0.5</span>)
-
-<span class="kw">library</span>(ggplot2)
-<span class="kw">ggplot</span>(Schutte, <span class="kw">aes</span>(week, fatigue, <span class="dt">shape =</span> treatment, <span class="dt">color =</span> treatment)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>case, <span class="dt">ncol =</span> <span class="dv">3</span>) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">color=</span><span class="st">&quot;Phase&quot;</span>,<span class="dt">shape=</span><span class="st">&quot;Phase&quot;</span>, <span class="dt">y =</span><span class="st">&quot;Fatigue&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Week&quot;</span>) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> change, <span class="kw">aes</span>(<span class="dt">xintercept=</span>phase.change)) +
-<span class="st">  </span><span class="kw">theme_bw</span>() +<span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">data</span>(Schutte)</a>
+<a class="sourceLine" id="cb26-2" title="2">Schutte &lt;-<span class="st"> </span><span class="kw">subset</span>(Schutte, case <span class="op">!=</span><span class="st"> &quot;Case 4&quot;</span>)</a>
+<a class="sourceLine" id="cb26-3" title="3">Schutte<span class="op">$</span>case &lt;-<span class="st"> </span><span class="kw">factor</span>(Schutte<span class="op">$</span>case)</a>
+<a class="sourceLine" id="cb26-4" title="4"></a>
+<a class="sourceLine" id="cb26-5" title="5">change &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">case=</span><span class="kw">unique</span>(Schutte<span class="op">$</span>case),</a>
+<a class="sourceLine" id="cb26-6" title="6">                     <span class="dt">phase.change =</span> <span class="kw">with</span>(<span class="kw">subset</span>(Schutte, treatment<span class="op">==</span><span class="st"> &quot;treatment&quot;</span>), </a>
+<a class="sourceLine" id="cb26-7" title="7">                                         <span class="kw">tapply</span>(week, case, min)) <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb26-8" title="8"></a>
+<a class="sourceLine" id="cb26-9" title="9"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb26-10" title="10"><span class="kw">ggplot</span>(Schutte, <span class="kw">aes</span>(week, fatigue, <span class="dt">shape =</span> treatment, <span class="dt">color =</span> treatment)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>case, <span class="dt">ncol =</span> <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-12" title="12"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">color=</span><span class="st">&quot;Phase&quot;</span>,<span class="dt">shape=</span><span class="st">&quot;Phase&quot;</span>, <span class="dt">y =</span><span class="st">&quot;Fatigue&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Week&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-13" title="13"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> change, <span class="kw">aes</span>(<span class="dt">xintercept=</span>phase.change)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-14" title="14"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>Time trends are apparent in the outcome series, as are changes in slope in the treatment condition. In order to operationally define a design-comparable SMD effect sizes in a model that includes time trends and treatment-by-time interactions, one will need to choose a time point A at which the treatment would begin and a time point B at which outcomes would be measured, both in a hypothetical between-subjects design based on the same population of participants. Here, we take A = 2 and B = 9; centering time at week 9 simplifies the effect size calculations.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create time-by-trt interaction</span>
-Schutte$trt_week &lt;-<span class="st"> </span><span class="kw">with</span>(Schutte, 
-                         <span class="kw">unlist</span>(<span class="kw">tapply</span>((treatment==<span class="st">&quot;treatment&quot;</span>) *<span class="st"> </span>week, 
-                                        <span class="kw">list</span>(treatment,case), 
-                                        function(x) x -<span class="st"> </span><span class="kw">min</span>(x))) +<span class="st"> </span>(treatment==<span class="st">&quot;treatment&quot;</span>))
-
-<span class="co"># time-point constants</span>
-A &lt;-<span class="st"> </span><span class="dv">2</span>
-B &lt;-<span class="st"> </span><span class="dv">9</span>
-<span class="co"># center at follow-up time</span>
-Center &lt;-<span class="st"> </span>B
-Schutte$week &lt;-<span class="st"> </span>Schutte$week -<span class="st"> </span>Center</code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># create time-by-trt interaction</span></a>
+<a class="sourceLine" id="cb27-2" title="2">Schutte<span class="op">$</span>trt_week &lt;-<span class="st"> </span><span class="kw">with</span>(Schutte, </a>
+<a class="sourceLine" id="cb27-3" title="3">                         <span class="kw">unlist</span>(<span class="kw">tapply</span>((treatment<span class="op">==</span><span class="st">&quot;treatment&quot;</span>) <span class="op">*</span><span class="st"> </span>week, </a>
+<a class="sourceLine" id="cb27-4" title="4">                                        <span class="kw">list</span>(treatment,case), </a>
+<a class="sourceLine" id="cb27-5" title="5">                                        <span class="cf">function</span>(x) x <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x))) <span class="op">+</span><span class="st"> </span>(treatment<span class="op">==</span><span class="st">&quot;treatment&quot;</span>))</a>
+<a class="sourceLine" id="cb27-6" title="6"></a>
+<a class="sourceLine" id="cb27-7" title="7"><span class="co"># time-point constants</span></a>
+<a class="sourceLine" id="cb27-8" title="8">A &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb27-9" title="9">B &lt;-<span class="st"> </span><span class="dv">9</span></a>
+<a class="sourceLine" id="cb27-10" title="10"><span class="co"># center at follow-up time</span></a>
+<a class="sourceLine" id="cb27-11" title="11">Center &lt;-<span class="st"> </span>B</a>
+<a class="sourceLine" id="cb27-12" title="12">Schutte<span class="op">$</span>week &lt;-<span class="st"> </span>Schutte<span class="op">$</span>week <span class="op">-</span><span class="st"> </span>Center</a></code></pre></div>
 <p>Having completed the data-cleaning process, three different models will be considered, again following the example from Pustejovsky, Hedges, and Shadish (2014).</p>
 <div id="varying-intercepts-fixed-treatment-effect-fixed-trends" class="section level3">
 <h3>Varying intercepts, fixed treatment effect, fixed trends</h3>
 <p>The initial model allows for a baseline time trend, treatment effect, and treatment-by-time interaction, all of which are assumed to be constant across the 12 cases; only the baseline intercept is assumed to vary across cases. This specification corresponds to Model MB3 from Pustejovsky, Hedges, and Shadish (2014)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hlm1 &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> fatigue ~<span class="st"> </span>week +<span class="st"> </span>treatment +<span class="st"> </span>trt_week, 
-            <span class="dt">random =</span> ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>case, 
-            <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, ~<span class="st"> </span>week |<span class="st"> </span>case),
-            <span class="dt">data =</span> Schutte,
-            <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
-<span class="kw">summary</span>(hlm1)</code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">hlm1 &lt;-<span class="st"> </span><span class="kw">lme</span>(<span class="dt">fixed =</span> fatigue <span class="op">~</span><span class="st"> </span>week <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>trt_week, </a>
+<a class="sourceLine" id="cb28-2" title="2">            <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>case, </a>
+<a class="sourceLine" id="cb28-3" title="3">            <span class="dt">correlation =</span> <span class="kw">corAR1</span>(<span class="dv">0</span>, <span class="op">~</span><span class="st"> </span>week <span class="op">|</span><span class="st"> </span>case),</a>
+<a class="sourceLine" id="cb28-4" title="4">            <span class="dt">data =</span> Schutte,</a>
+<a class="sourceLine" id="cb28-5" title="5">            <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)</a>
+<a class="sourceLine" id="cb28-6" title="6"><span class="kw">summary</span>(hlm1)</a></code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
 ##  Data: Schutte 
 ##        AIC     BIC    logLik
@@ -424,9 +656,9 @@ Schutte$week &lt;-<span class="st"> </span>Schutte$week -<span class="st"> </spa
 ## 
 ## Number of Observations: 136
 ## Number of Groups: 12</code></pre>
-<p>The design-comparable standarized mean difference corresponds to the treatment effect at week B = 9, after B - A = 7 weeks of treatment. The corresponding values of <code>p_const</code> and <code>r_const</code> are specified below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Schutte_g1 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(<span class="dt">m_fit =</span> hlm1, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,B -<span class="st"> </span>A), <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))
-Schutte_g1[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</code></pre></div>
+<p>The design-comparable standardized mean difference corresponds to the treatment effect at week B = 9, after B - A = 7 weeks of treatment. The corresponding values of <code>p_const</code> and <code>r_const</code> are specified below.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">Schutte_g1 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(<span class="dt">m_fit =</span> hlm1, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,B <span class="op">-</span><span class="st"> </span>A), <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb30-2" title="2">Schutte_g1[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</a></code></pre></div>
 <pre><code>## $g_AB
 ##          [,1]
 ## [1,] -1.33744
@@ -443,9 +675,9 @@ Schutte_g1[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<s
 <div id="varying-intercepts-fixed-treatment-effect-varying-trends" class="section level3">
 <h3>Varying intercepts, fixed treatment effect, varying trends</h3>
 <p>The next model (Model MB4) allows the baseline time trend to vary across cases. This can be done by modifying the previous model with the <code>update</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hlm2 &lt;-<span class="st"> </span><span class="kw">update</span>(hlm1, <span class="dt">random =</span> ~<span class="st"> </span>week |<span class="st"> </span>case, 
-               <span class="dt">control=</span><span class="kw">lmeControl</span>(<span class="dt">msMaxIter =</span> <span class="dv">50</span>, <span class="dt">apVar=</span><span class="ot">FALSE</span>, <span class="dt">returnObject=</span><span class="ot">TRUE</span>))
-<span class="kw">summary</span>(hlm2)</code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">hlm2 &lt;-<span class="st"> </span><span class="kw">update</span>(hlm1, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span>week <span class="op">|</span><span class="st"> </span>case, </a>
+<a class="sourceLine" id="cb32-2" title="2">               <span class="dt">control=</span><span class="kw">lmeControl</span>(<span class="dt">msMaxIter =</span> <span class="dv">50</span>, <span class="dt">apVar=</span><span class="ot">FALSE</span>, <span class="dt">returnObject=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb32-3" title="3"><span class="kw">summary</span>(hlm2)</a></code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
 ##  Data: Schutte 
 ##        AIC      BIC    logLik
@@ -482,13 +714,13 @@ Schutte_g1[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<s
 ## 
 ## Number of Observations: 136
 ## Number of Groups: 12</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(hlm1, hlm2)</code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw">anova</span>(hlm1, hlm2)</a></code></pre></div>
 <pre><code>##      Model df      AIC      BIC    logLik   Test  L.Ratio p-value
 ## hlm1     1  7 884.1744 904.3540 -435.0872                        
 ## hlm2     2  9 875.9526 901.8978 -428.9763 1 vs 2 12.22179  0.0022</code></pre>
 <p>A likelihood ratio test rejects the initial model in favor of this more flexible model. An effect size estimate is calculated from the fitted model as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Schutte_g2 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(<span class="dt">m_fit =</span> hlm2, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, B -<span class="st"> </span>A), <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
-Schutte_g2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">Schutte_g2 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(<span class="dt">m_fit =</span> hlm2, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, B <span class="op">-</span><span class="st"> </span>A), <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb36-2" title="2">Schutte_g2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]</a></code></pre></div>
 <pre><code>## $g_AB
 ##           [,1]
 ## [1,] -1.012721
@@ -505,9 +737,9 @@ Schutte_g2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<s
 <div id="varying-intercepts-varying-trends-varying-treatment-by-time-interactions" class="section level3">
 <h3>Varying intercepts, varying trends, varying treatment-by-time interactions</h3>
 <p>The final model (Model MB5) is yet more flexible, in that it allows the treatment-by-time interactions to vary across cases. Given that the data contain only twelve cases, fitting a model with three random effects would be questionable if the goal were to make inferences about the full structure of the model. However, simulation evidence from Pustejovsky, Hedges, and Shadish (2014) suggests that using such a flexible parameterization may nonetheless be reasonable for the more limited purpose of effect size estimation.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hlm3 &lt;-<span class="st"> </span><span class="kw">update</span>(hlm2, <span class="dt">random =</span> ~<span class="st"> </span>week +<span class="st"> </span>trt_week |<span class="st"> </span>case, 
-               <span class="dt">control=</span><span class="kw">lmeControl</span>(<span class="dt">msMaxIter =</span> <span class="dv">50</span>, <span class="dt">apVar=</span><span class="ot">FALSE</span>, <span class="dt">returnObject=</span><span class="ot">TRUE</span>))
-<span class="kw">summary</span>(hlm3)</code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">hlm3 &lt;-<span class="st"> </span><span class="kw">update</span>(hlm2, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span>week <span class="op">+</span><span class="st"> </span>trt_week <span class="op">|</span><span class="st"> </span>case, </a>
+<a class="sourceLine" id="cb38-2" title="2">               <span class="dt">control=</span><span class="kw">lmeControl</span>(<span class="dt">msMaxIter =</span> <span class="dv">50</span>, <span class="dt">apVar=</span><span class="ot">FALSE</span>, <span class="dt">returnObject=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb38-3" title="3"><span class="kw">summary</span>(hlm3)</a></code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
 ##  Data: Schutte 
 ##        AIC      BIC    logLik
@@ -545,17 +777,17 @@ Schutte_g2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<s
 ## 
 ## Number of Observations: 136
 ## Number of Groups: 12</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(hlm2, hlm3)</code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="kw">anova</span>(hlm2, hlm3)</a></code></pre></div>
 <pre><code>##      Model df      AIC      BIC    logLik   Test L.Ratio p-value
 ## hlm2     1  9 875.9526 901.8978 -428.9763                       
 ## hlm3     2 12 873.0245 907.6181 -424.5123 1 vs 2 8.92808  0.0303</code></pre>
 <p>The REML estimation algorithm fails to converge because the estimate of the correlation between the random slopes and the random treatment-by-time interactions approaches 1. A likelihood ratio test rejects the previous model (which constrained the treatment-by-time interactions to be constant). However, this test may be inaccurate with a such small sample of cases, and given variance component estimates that lie on an edge of the parameter space. An effect size estimate based on this fitted model is obtained as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Schutte_g3 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(<span class="dt">m_fit =</span> hlm3, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,B -<span class="st"> </span>A), <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))
-
-<span class="co"># compare effect size estimates</span>
-<span class="kw">cbind</span>(<span class="dt">MB3 =</span> <span class="kw">unlist</span>(Schutte_g1[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]), 
-      <span class="dt">MB4 =</span> <span class="kw">unlist</span>(Schutte_g2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]), 
-      <span class="dt">MB5 =</span> <span class="kw">unlist</span>(Schutte_g3[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]))</code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">Schutte_g3 &lt;-<span class="st"> </span><span class="kw">g_REML</span>(<span class="dt">m_fit =</span> hlm3, <span class="dt">p_const =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,B <span class="op">-</span><span class="st"> </span>A), <span class="dt">r_const =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb42-2" title="2"></a>
+<a class="sourceLine" id="cb42-3" title="3"><span class="co"># compare effect size estimates</span></a>
+<a class="sourceLine" id="cb42-4" title="4"><span class="kw">cbind</span>(<span class="dt">MB3 =</span> <span class="kw">unlist</span>(Schutte_g1[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]), </a>
+<a class="sourceLine" id="cb42-5" title="5">      <span class="dt">MB4 =</span> <span class="kw">unlist</span>(Schutte_g2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]), </a>
+<a class="sourceLine" id="cb42-6" title="6">      <span class="dt">MB5 =</span> <span class="kw">unlist</span>(Schutte_g3[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<span class="st">&quot;V_g_AB&quot;</span>,<span class="st">&quot;nu&quot;</span>)]))</a></code></pre></div>
 <pre><code>##               MB3        MB4        MB5
 ## g_AB   -1.3374403 -1.0127209 -1.3262061
 ## V_g_AB  0.3932573  0.2197237  0.6832475
@@ -583,7 +815,7 @@ Schutte_g2[<span class="kw">c</span>(<span class="st">&quot;g_AB&quot;</span>,<s
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

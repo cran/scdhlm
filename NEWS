@@ -1,12 +1,19 @@
+scdhlm 0.3.2
+=======================
+* Updated HPS estimation functions to work with datasets (issue #2 from austinj).
+* Added additional example datasets (Ruiz, Salazar, Thiemann2001, Thiemann2004, Bryant2018).
+* Updated web-app to allow use of .xlsx files.
+* Fixed bug in web-app occurring when cases were listed out of alphabetical order.
+* Fixed bug in web-app occurring when auto-correlation is very weakly identified.
+
 scdhlm 0.3.1
 =======================
-* updated shiny app with additional documentation
-* added additional example datasets (BartonArwood, Rodriguez, Romaniuk)
-
+* Updated shiny app with additional documentation.
+* Added additional example datasets (BartonArwood, Rodriguez, Romaniuk, AlberMorgan).
 
 scdhlm 0.3
 =======================
-* shiny app for calculating between-case standardized mean difference effect sizes.
+* Shiny app for calculating between-case standardized mean difference effect sizes.
 
 scdhlm 0.2.2
 =======================

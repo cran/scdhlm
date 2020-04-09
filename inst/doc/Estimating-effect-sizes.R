@@ -3,33 +3,32 @@ library(scdhlm)
 
 ## ------------------------------------------------------------------------
 data(Lambert)
-Lambert_ES <- with(Lambert, effect_size_ABk(outcome = outcome, treatment = treatment, 
-                                            id = case, phase = phase, time = time))
+
+Lambert_ES <- effect_size_ABk(outcome = outcome, treatment = treatment, 
+                                            id = case, phase = phase, time = time, data= Lambert)
+
 str(Lambert_ES)
 
 ## ------------------------------------------------------------------------
-with(Lambert, effect_size_ABk(outcome = outcome, treatment = treatment, 
-                              id = case, phase = phase, time = time, 
-                              phi = 0.10))[c("delta_hat","V_delta_hat","nu")]
+effect_size_ABk(outcome = outcome, treatment = treatment, 
+                              id = case, phase = phase, time = time, data= Lambert,
+                              phi = 0.10)[c("delta_hat","V_delta_hat","nu")]
 
-with(Lambert, effect_size_ABk(outcome = outcome, treatment = treatment, 
-                              id = case, phase = phase, time = time, 
-                              phi = 0.35))[c("delta_hat","V_delta_hat","nu")]
+effect_size_ABk(outcome = outcome, treatment = treatment, 
+                              id = case, phase = phase, time = time, data= Lambert,
+                              phi = 0.35)[c("delta_hat","V_delta_hat","nu")]
 
 ## ------------------------------------------------------------------------
 data(Anglesea)
-Anglesea_ES <- with(Anglesea, effect_size_ABk(outcome, condition, case, phase, session))
+Anglesea_ES <- effect_size_ABk(outcome, condition, case, phase, session, data = Anglesea)
 Anglesea_ES[c("delta_hat","V_delta_hat","nu")]
 
 ## ------------------------------------------------------------------------
 data(Saddler)
 
-quality_ES <- with(subset(Saddler, measure=="writing quality"), 
-                   effect_size_MB(outcome, treatment, case, time))
-complexity_ES <- with(subset(Saddler, measure=="T-unit length"), 
-                      effect_size_MB(outcome, treatment, case, time))
-construction_ES <- with(subset(Saddler, measure=="number of constructions"), 
-                        effect_size_MB(outcome, treatment, case, time))
+quality_ES <- effect_size_MB(outcome, treatment, case, time, data= subset(Saddler, measure=="writing quality"))
+complexity_ES <- effect_size_MB(outcome, treatment, case, time , data= subset(Saddler, measure=="T-unit length"))
+construction_ES <- effect_size_MB(outcome, treatment, case, time, data= subset(Saddler, measure=="number of constructions"))
 
 cbind(quality = unlist(quality_ES), 
       complexity = unlist(complexity_ES), 
@@ -51,7 +50,7 @@ str(quality_ES_RML)
 data(Laski)
 
 # Hedges, Pustejovsky, & Shadish (2013)
-Laski_ES_HPS <- with(Laski, effect_size_MB(outcome, treatment, case, time))
+Laski_ES_HPS <- effect_size_MB(outcome, treatment, case, time, data= Laski)
 
 # Pustejovsky, Hedges, & Shadish (2014)
 Laski_RML <- lme(fixed = outcome ~ treatment,

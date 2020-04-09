@@ -4,7 +4,9 @@
 \name{Saddler}
 \alias{Saddler}
 \title{Example 1 from Hedges, Pustejovsky, & Shadish (2013)}
-\format{A data frame with 124 rows and 5 variables}
+\format{
+A data frame with 124 rows and 5 variables
+}
 \source{
 Saddler, B., Behforooz, B., & Asaro, K. (2008). 
 The effects of sentence-combining instruction on the writing of 
@@ -29,4 +31,3 @@ A standardized mean difference effect size for multiple baseline designs across 
 \emph{Research Synthesis Methods, 4}(4), 324-341. doi:\href{http://doi.org/10.1002/jrsm.1086}{10.1002/jrsm.1086}
 }
 \keyword{datasets}
-

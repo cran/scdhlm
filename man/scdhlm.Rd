@@ -3,7 +3,6 @@
 \docType{package}
 \name{scdhlm}
 \alias{scdhlm}
-\alias{scdhlm-package}
 \title{scdhlm}
 \description{
 Standardize mean difference effect size estimation based on hierarchical models
@@ -22,19 +21,24 @@ as described in Hedges, Pustejovsky, and Shadish (2013).
 as described in Hedges, Pustejovsky, and Shadish (2012).
 }
 
-The package also includes the data used in the examples from each paper, as well as a few other datasets: 
+The package also includes the data used in the examples from each paper, as well as several other datasets: 
 \itemize{
-\item \code{\link{Lambert}}
+\item \code{\link{AlberMorgan}}
 \item \code{\link{Anglesea}}
-\item \code{\link{Saddler}}
-\item \code{\link{Laski}}
-\item \code{\link{Schutte}}
-\item \code{\link{Thorne}}
+\item \code{\link{BartonArwood}}
+\item \code{\link{Bryant2018}}
 \item \code{\link{Carson}}
+\item \code{\link{Lambert}}
+\item \code{\link{Laski}}
+\item \code{\link{Musser}}
+\item \code{\link{Rodriguez}}
+\item \code{\link{Ruiz}}
+\item \code{\link{Saddler}}
+\item \code{\link{Schutte}}
+\item \code{\link{Thiemann2001}}
+\item \code{\link{Thiemann2004}}
+\item \code{\link{Thorne}}
 }
-}
-\author{
-James E. Pustejovsky <jepusto@gmail.com>
 }
 \references{
 Hedges, L. V., Pustejovsky, J. E., & Shadish, W. R. (2012).
@@ -49,4 +53,6 @@ Pustejovsky, J. E., Hedges, L. V., & Shadish, W. R. (2014).
 Design-comparable effect sizes in multiple baseline designs: A general modeling framework.
 \emph{Journal of Educational and Behavioral Statistics, 39}(4), 211-227. doi:\href{http://doi.org/10.3102/1076998614547577}{10.3102/1076998614547577}
 }
-
+\author{
+James E. Pustejovsky <jepusto@gmail.com>
+}

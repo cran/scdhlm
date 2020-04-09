@@ -2,24 +2,60 @@ library(shiny)
 library(markdown)
 library(ggplot2)
 library(scdhlm)
+library(readxl)
+
 
 source("mappings.R")
 source("graphing-functions.R")
 source("helper-functions.R")
 source("lme-fit.R")
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   
   # Read in data
-  
-  datFile <- reactive({
-    
-    inFile <- input$dat
-    
-    if (is.null(inFile)) return(NULL)
-
-    read.table(inFile$datapath, header=input$header, sep=input$sep, quote=input$quote)
+  sheetname <- reactive({
+    if (input$dat_type == "xlsx") {
+      inFile <- input$xlsx
+      if (is.null(inFile)) return(NULL)
+      sheetnames <- excel_sheets(inFile$datapath)
+      return(sheetnames)
+    } else {
+      return(NULL)
+    }
   })
+  
+  observe({
+    updateSelectInput(session, "inSelect", label = "Select a sheet",
+                      choices = sheetname(),
+                      selected = NULL)
+  })
+  
+  datFile <- reactive({ 
+    
+    if (input$dat_type == "dat") {
+ 
+      inFile <- input$dat
+      
+      if (is.null(inFile)) return(NULL)
+  
+      read.table(inFile$datapath, header=input$header, 
+                 sep=input$sep, quote=input$quote,
+                 stringsAsFactors = FALSE)
+      
+   } else if (input$dat_type == "xlsx") {
+       
+       inFile <- input$xlsx
+       
+       if (is.null(inFile)) return(NULL)
+       
+       as.data.frame(read_xlsx(inFile$datapath, col_names = input$col_names,
+                 sheet = input$inSelect))
+       
+   } else {
+   }
+  })
+  
+  
   
   # Check that file is uploaded
   
@@ -45,7 +81,7 @@ shinyServer(function(input, output) {
     var_names <- names(datFile())
     n_var <- length(var_names)
     list(
-      selectizeInput("filters", label = "Filtering variables", choices = var_names, selected = NULL, multiple = TRUE),
+      selectizeInput("filters", label = "Filtering variables (optional)", choices = var_names, selected = NULL, multiple = TRUE),
       selectInput("caseID", label = "Case identifier", choices = var_names, selected = var_names[n_var - 3]),
       selectInput("phaseID", label = "Phase identifier", choices = var_names, selected = var_names[n_var - 2]),
       selectInput("session", label = "Session number", choices = var_names, selected = var_names[n_var - 1]),
@@ -107,9 +143,11 @@ shinyServer(function(input, output) {
       names(dat) <- c("case","session","phase","outcome")
       trt_phase <- levels(as.factor(dat$phase))[2]
     } else {
-      caseID <- as.factor(datFile()[,input$caseID])
+      case_vec <- datFile()[,input$caseID]
+      caseID <- factor(case_vec, levels = unique(case_vec))
       session <- as.numeric(datFile()[,input$session])
-      phaseID <- as.factor(datFile()[,input$phaseID])
+      phase_vec <- datFile()[,input$phaseID]
+      phaseID <- factor(phase_vec, levels = unique(phase_vec))
       outcome <- as.numeric(datFile()[,input$outcome])
       dat <- data.frame(case = caseID, session = session, phase = phaseID, outcome = outcome)
       if (!is.null(input$filters)) {
@@ -126,6 +164,10 @@ shinyServer(function(input, output) {
     } else {
       dat$phase_pair <- unlist(by(dat, dat$case, phase_pairs))
     }
+    
+    # remove rows with missing outcome values
+    dat <- dat[!is.na(dat$outcome),]
+    dat <- droplevels(dat)
     return(dat)
   })
   
@@ -323,5 +365,8 @@ shinyServer(function(input, output) {
     }
   }, height = function() 120 * nlevels(datClean()$case),
   width = function() 700)
+  
+  
+ session$onSessionEnded(stopApp)
   
 })
