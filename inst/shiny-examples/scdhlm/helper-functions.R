@@ -1,48 +1,20 @@
-
 #---------------------------------------------------------------
-# calculate session-by-treatment interaction
-#---------------------------------------------------------------
-
-session_by_treatment <- function(x, trt_phase) {
-  pmax(0, x$session - min(x$session[x$phase==trt_phase]))
-}
-
-
-#---------------------------------------------------------------
-# calculate phase-pairs based on phases and session numbering
+# parse code chunks with user-specified arguments
 #---------------------------------------------------------------
 
-phase_pairs <- function(x) {
-  conditions <- levels(as.factor(x$phase))
-  n <- length(x$phase)
-  phase <- x$phase[order(x$session)]
-  y <- rep(1,n)
-  for (i in 2:n) {
-    (i <- i + 1)
-    (which_lev <- match(phase[i-1], conditions))
-    (which_conditions <- conditions[c(which_lev, which_lev + 1)])
-    !(phase[i] %in% which_conditions)
-    (y[i] <- y[i - 1] + !(phase[i] %in% which_conditions))
-  }
-  y[order(order(x$session))]
+parse_code_chunk <- function(chunk, args) {
+  chunk_path <- system.file("shiny-examples/scdhlm/code-chunks", paste0(chunk,".R"), package = "scdhlm")
+  raw_code <- readLines(chunk_path)
+  code_chunk <- paste(raw_code, collapse = "\n")
+  glue::glue_data(.x = args, code_chunk)
 }
 
 #---------------------------------------------------------------
-# calculate phase border times
+# paste an object in server for code chunks
 #---------------------------------------------------------------
-
-phase_lines <- function(x) {
-  phase <- x$phase[order(x$session)]
-  n <- length(phase)
-  switches <- which(phase[2:n] != phase[1:(n-1)])
-  (x$session[switches] + x$session[switches + 1]) / 2
+paste_object <- function(object) {
+  paste("c(", paste(object, collapse = ","), ")", sep = "")
 }
-
-phase_lines_by_case <- function(x) {
-  phase_line <- by(x, x$case, phase_lines)
-  data.frame(case = rep(names(phase_line), lengths(phase_line)), phase_time = as.vector(unlist(phase_line)))
-}
-
 
 #---------------------------------------------------------------
 # calculate timing defaults
@@ -61,25 +33,29 @@ default_times <- function(x) {
 # model validation
 #---------------------------------------------------------------
 
-validate_specification <- function(FE_base, RE_base, FE_trt, RE_trt) {
+validate_specification <- function(FE_base, RE_base, FE_trt, RE_trt, case) {
   
   errors <- vector(mode = "character")
   if (!("0" %in% FE_base)) {
-    errors <- c(errors, "Model must include a fixed effect for baseline level.")
+    errors <- c(errors, "<font color='red'>Model must include a fixed effect for baseline level.</font>")
   }
   if (!("0" %in% RE_base)) {
-    errors <- c(errors, "Model must include a random effect for baseline level.")
+    errors <- c(errors, "<font color='red'>Model must include a random effect for baseline level.</font>")
   }
   if (length(FE_trt)==0) {
-    errors <- c(errors, "Model must include at least one fixed effect for the treatment phase.")
+    errors <- c(errors, "<font color='red'>Model must include at least one fixed effect for the treatment phase.</font>")
+  }
+  
+  if(nlevels(case) < 3) {
+    errors <- c(errors, "<font color='red'>Model must include at least three cases. Currently, you have less than three cases.</font>")
   }
   
   if (length(errors)==0) {
     return(NULL)
   } else if (length(errors) == 1) {
-    error_string <- paste("<b>Error:</b>", errors, "<br/>")
+    error_string <- paste("<b><font color='red'>Error:</font></b>", errors, "<br/>")
   } else {
-    error_string <- paste("<b>Errors:</b> <br/>", paste(errors, collapse = "<br/>"), "<br/>")
+    error_string <- paste("<b><font color='red'>Errors:</font></b><br/>", paste(errors, collapse = "<br/>"), "<br/>")
   } 
   
   return(HTML(error_string))
@@ -89,17 +65,18 @@ validate_specification <- function(FE_base, RE_base, FE_trt, RE_trt) {
 # effect size report table
 #---------------------------------------------------------------
 
-summarize_ES <- function(res, filter_vars, filter_vals, 
+summarize_ES <- function(res, filter_vals, 
                          design, method, 
                          FE_base, RE_base, FE_trt, RE_trt,
                          A, B, coverage = 95L) {
-
+  
   if (method=="RML") {
     ES_summary <- data.frame(
-      ES = res$g_AB,
-      SE = sqrt(res$V_g_AB)
+      ES = as.numeric(res$g_AB),
+      SE = as.numeric(res$SE_g_AB)
     )
-    res$rho <- with(res, Tau[1] / (Tau[1] + sigma_sq))
+    res$rho <- with(res, theta$Tau[[1]][1] / (theta$Tau[[1]][1] + theta$sigma_sq))
+    res$phi <- res$theta$cor_params
   } else {
     ES_summary <- data.frame(
       ES = res$delta_hat,
@@ -139,12 +116,10 @@ summarize_ES <- function(res, filter_vars, filter_vals,
                          "Initial treatment time","Follow-up time")
   
   if (!is.null(filter_vals)) {
-    filter_vals <- lapply(filter_vals, paste, collapse = ", ")
-    names(filter_vals) <- substr(filter_vars, 8, nchar(filter_vars))
-    filter_vals <- as.data.frame(filter_vals)
     ES_summary <- cbind(ES_summary, filter_vals)
-  } 
+  } else {
+    ES_summary <- ES_summary
+  }
   
   ES_summary  
 }
-

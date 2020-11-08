@@ -1,52 +1,63 @@
-## ---- message = FALSE----------------------------------------------------
+## ---- message = FALSE---------------------------------------------------------
 library(scdhlm)
 
-## ------------------------------------------------------------------------
+## ----Lambert------------------------------------------------------------------
 data(Lambert)
 
 Lambert_ES <- effect_size_ABk(outcome = outcome, treatment = treatment, 
-                                            id = case, phase = phase, time = time, data= Lambert)
+                              id = case, phase = phase, time = time, 
+                              data = Lambert)
 
-str(Lambert_ES)
+print(Lambert_ES, 5)
 
-## ------------------------------------------------------------------------
-effect_size_ABk(outcome = outcome, treatment = treatment, 
-                              id = case, phase = phase, time = time, data= Lambert,
-                              phi = 0.10)[c("delta_hat","V_delta_hat","nu")]
+## ----Lambert-summary----------------------------------------------------------
+summary(Lambert_ES)
 
-effect_size_ABk(outcome = outcome, treatment = treatment, 
-                              id = case, phase = phase, time = time, data= Lambert,
-                              phi = 0.35)[c("delta_hat","V_delta_hat","nu")]
+## ----Lambert_sensitivity------------------------------------------------------
+Lambert_ES2 <- effect_size_ABk(outcome = outcome, treatment = treatment, 
+                id = case, phase = phase, time = time, 
+                data = Lambert, phi = 0.10)
+print(Lambert_ES2, digits = 5)
 
-## ------------------------------------------------------------------------
+Lambert_ES3 <- effect_size_ABk(outcome = outcome, treatment = treatment, 
+                id = case, phase = phase, time = time, 
+                data = Lambert, phi = 0.35)
+print(Lambert_ES3, digits = 5)
+
+## ----Anglesea-----------------------------------------------------------------
 data(Anglesea)
 Anglesea_ES <- effect_size_ABk(outcome, condition, case, phase, session, data = Anglesea)
-Anglesea_ES[c("delta_hat","V_delta_hat","nu")]
+Anglesea_ES
 
-## ------------------------------------------------------------------------
+## ----Saddler------------------------------------------------------------------
 data(Saddler)
 
-quality_ES <- effect_size_MB(outcome, treatment, case, time, data= subset(Saddler, measure=="writing quality"))
-complexity_ES <- effect_size_MB(outcome, treatment, case, time , data= subset(Saddler, measure=="T-unit length"))
-construction_ES <- effect_size_MB(outcome, treatment, case, time, data= subset(Saddler, measure=="number of constructions"))
+quality_ES <- effect_size_MB(outcome, treatment, case, time, 
+                             data = subset(Saddler, measure=="writing quality"))
+complexity_ES <- effect_size_MB(outcome, treatment, case, time , 
+                                data = subset(Saddler, measure=="T-unit length"))
+construction_ES <- effect_size_MB(outcome, treatment, case, time, 
+                                  data = subset(Saddler, measure=="number of constructions"))
 
-cbind(quality = unlist(quality_ES), 
-      complexity = unlist(complexity_ES), 
-      construction = unlist(construction_ES))[c("delta_hat","V_delta_hat","nu","phi","rho"),]
+data.frame(
+  quality = round(unlist(quality_ES), 5),
+  complexity = round(unlist(complexity_ES), 5),
+  construction = round(unlist(construction_ES), 5)
+)[c("delta_hat","V_delta_hat","nu","phi","rho"),]
 
-## ------------------------------------------------------------------------
+## ----quality-RML--------------------------------------------------------------
 quality_RML <- lme(fixed = outcome ~ treatment, 
                    random = ~ 1 | case, 
                    correlation = corAR1(0, ~ time | case), 
                    data = subset(Saddler, measure=="writing quality"))
 summary(quality_RML)
 
-## ------------------------------------------------------------------------
-quality_ES_RML <- g_REML(quality_RML, p_const = c(0,1), 
-                         r_const = c(1,0,1), returnModel=FALSE)
-str(quality_ES_RML)
+## ----quality-g-mlm, eval=TRUE-------------------------------------------------
+quality_ES_RML <- g_mlm(quality_RML, p_const = c(0,1), 
+                         r_const = c(1,0,1), returnModel = TRUE)
+summary(quality_ES_RML)
 
-## ------------------------------------------------------------------------
+## ----Laski-RML, eval = TRUE---------------------------------------------------
 data(Laski)
 
 # Hedges, Pustejovsky, & Shadish (2013)
@@ -58,14 +69,19 @@ Laski_RML <- lme(fixed = outcome ~ treatment,
                  correlation = corAR1(0, ~ time | case), 
                  data = Laski)
 summary(Laski_RML)
-Laski_ES_RML <- g_REML(Laski_RML, p_const = c(0,1),
-                       r_const = c(1,0,1), returnModel=FALSE)
+
+## ----Laski-ES-RML, eval = TRUE------------------------------------------------
+Laski_ES_RML <- g_mlm(Laski_RML, p_const = c(0,1), r_const = c(1,0,1))
 
 # compare the estimates
-cbind(HPS = with(Laski_ES_HPS, c(SMD = delta_hat, Variance = V_delta_hat, phi = phi, rho = rho, nu = nu)),
-      RML = with(Laski_ES_RML, c(g_AB, V_g_AB, phi, Tau / (Tau + sigma_sq), nu)))
+data.frame(
+  HPS = with(Laski_ES_HPS, c(SMD = delta_hat, SE = sqrt(V_delta_hat), 
+                             phi = phi, rho = rho, nu = nu)),
+  RML = with(Laski_ES_RML, c(g_AB, SE_g_AB, theta$cor_params, 
+                             theta$Tau$case / (theta$Tau$case + theta$sigma_sq), nu))
+)
 
-## ------------------------------------------------------------------------
+## ----Laski-RML2---------------------------------------------------------------
 Laski_RML2 <- lme(fixed = outcome ~ treatment,
                  random = ~ treatment | case, 
                  correlation = corAR1(0, ~ time | case), 
@@ -73,12 +89,11 @@ Laski_RML2 <- lme(fixed = outcome ~ treatment,
 summary(Laski_RML2)
 anova(Laski_RML, Laski_RML2)
 
-## ------------------------------------------------------------------------
-Laski_ES_RML2 <- g_REML(Laski_RML2, p_const = c(0,1), 
-                        r_const = c(1,0,1,0,0), returnModel=FALSE)
-Laski_ES_RML2[c("g_AB","V_g_AB","phi","nu")]
+## ----Laski-ES-RML2, eval=TRUE-------------------------------------------------
+Laski_ES_RML2 <- g_mlm(Laski_RML2, p_const = c(0,1), r_const = c(1,0,0,0,1))
+Laski_ES_RML2
 
-## ---- message = FALSE, fig.width = 7, fig.height = 7---------------------
+## ----Schutte-graph, message = FALSE, fig.width = 7, fig.height = 7------------
 data(Schutte)
 Schutte <- subset(Schutte, case != "Case 4")
 Schutte$case <- factor(Schutte$case)
@@ -94,7 +109,7 @@ ggplot(Schutte, aes(week, fatigue, shape = treatment, color = treatment)) +
   geom_vline(data = change, aes(xintercept=phase.change)) +
   theme_bw() + theme(legend.position = "bottom")
 
-## ------------------------------------------------------------------------
+## ----Schutte-center-----------------------------------------------------------
 # create time-by-trt interaction
 Schutte$trt_week <- with(Schutte, 
                          unlist(tapply((treatment=="treatment") * week, 
@@ -108,7 +123,7 @@ B <- 9
 Center <- B
 Schutte$week <- Schutte$week - Center
 
-## ----Model3--------------------------------------------------------------
+## ----Schutte-Model3-----------------------------------------------------------
 hlm1 <- lme(fixed = fatigue ~ week + treatment + trt_week, 
             random = ~ 1 | case, 
             correlation = corAR1(0, ~ week | case),
@@ -116,31 +131,36 @@ hlm1 <- lme(fixed = fatigue ~ week + treatment + trt_week,
             method = "REML")
 summary(hlm1)
 
-## ------------------------------------------------------------------------
-Schutte_g1 <- g_REML(m_fit = hlm1, p_const = c(0,0,1,B - A), r_const = c(1,0,1))
-Schutte_g1[c("g_AB","V_g_AB","nu")]
+## ----Schutte-ES-Model3, eval = TRUE-------------------------------------------
+Schutte_g1 <- g_mlm(hlm1, p_const = c(0,0,1,B - A), r_const = c(1,0,1))
+Schutte_g1
 
-## ----Model4--------------------------------------------------------------
+## ----Schutte-Model4-----------------------------------------------------------
 hlm2 <- update(hlm1, random = ~ week | case, 
                control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 summary(hlm2)
 anova(hlm1, hlm2)
 
-## ------------------------------------------------------------------------
-Schutte_g2 <- g_REML(m_fit = hlm2, p_const = c(0,0,1, B - A), r_const = c(1,0,1,0,0))
-Schutte_g2[c("g_AB","V_g_AB","nu")]
+## ----Schutte-ES-Model4, eval = TRUE-------------------------------------------
+Schutte_g2 <- g_mlm(hlm2, p_const = c(0,0,1, B - A), r_const = c(1,0,0,0,1))
+Schutte_g2
 
-## ----Model5, warning = FALSE---------------------------------------------
+## -----------------------------------------------------------------------------
+unlist(extract_varcomp(hlm2))
+
+## ----Schutte-Model5, warning = FALSE------------------------------------------
 hlm3 <- update(hlm2, random = ~ week + trt_week | case, 
                control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 summary(hlm3)
 anova(hlm2, hlm3)
 
-## ------------------------------------------------------------------------
-Schutte_g3 <- g_REML(m_fit = hlm3, p_const = c(0,0,1,B - A), r_const = c(1,0,1,0,0,0,0,0))
+## ----Schutte-ES-Model5, eval = TRUE-------------------------------------------
+Schutte_g3 <- g_mlm(hlm3, p_const = c(0,0,1,B - A), r_const = c(1,0,0,0,0,0,0,1))
 
 # compare effect size estimates
-cbind(MB3 = unlist(Schutte_g1[c("g_AB","V_g_AB","nu")]), 
-      MB4 = unlist(Schutte_g2[c("g_AB","V_g_AB","nu")]), 
-      MB5 = unlist(Schutte_g3[c("g_AB","V_g_AB","nu")]))
+data.frame(
+  MB3 = round(unlist(Schutte_g1[c("g_AB","SE_g_AB","nu")]), 3), 
+  MB4 = round(unlist(Schutte_g2[c("g_AB","SE_g_AB","nu")]), 3),
+  MB5 = round(unlist(Schutte_g3[c("g_AB","SE_g_AB","nu")]), 3)
+)
 
