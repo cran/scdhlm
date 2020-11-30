@@ -1,3 +1,9 @@
+# scdhlm 0.5.1
+
+* Modified the `Schutte` example dataset to exclude the fourth case, for consistency with the analysis presented in Pustejovsky, Hedges, & Shadish (2014).
+
+* Revised the definition of the treatment-by-time interaction variable calculated in `preprocess_SCD()` and in the shiny app, for consistency with Pustejovsky, Hedges, & Shadish (2014).
+
 # scdhlm 0.5.0
 
 * Added a new function `preprocess_SCD()` which handles initial data-cleaning steps for multiple baseline and treatment reversal designs.

@@ -40,10 +40,11 @@ construction_ES <- effect_size_MB(outcome, treatment, case, time,
                                   data = subset(Saddler, measure=="number of constructions"))
 
 data.frame(
-  quality = round(unlist(quality_ES), 5),
-  complexity = round(unlist(complexity_ES), 5),
-  construction = round(unlist(construction_ES), 5)
+  quality = unlist(quality_ES),
+  complexity = unlist(complexity_ES), 
+  construction = unlist(construction_ES) 
 )[c("delta_hat","V_delta_hat","nu","phi","rho"),]
+
 
 ## ----quality-RML--------------------------------------------------------------
 quality_RML <- lme(fixed = outcome ~ treatment, 
@@ -93,38 +94,33 @@ anova(Laski_RML, Laski_RML2)
 Laski_ES_RML2 <- g_mlm(Laski_RML2, p_const = c(0,1), r_const = c(1,0,0,0,1))
 Laski_ES_RML2
 
-## ----Schutte-graph, message = FALSE, fig.width = 7, fig.height = 7------------
-data(Schutte)
-Schutte <- subset(Schutte, case != "Case 4")
-Schutte$case <- factor(Schutte$case)
-
-change <- data.frame(case=unique(Schutte$case),
-                     phase.change = with(subset(Schutte, treatment== "treatment"), 
-                                         tapply(week, case, min)) - 0.5)
-
+## ----Schutte-graph, warning = FALSE, message = FALSE, fig.width = 7, fig.height = 7----
 library(ggplot2)
-ggplot(Schutte, aes(week, fatigue, shape = treatment, color = treatment)) + 
-  geom_point() + facet_wrap(~ case, ncol = 3) + 
-  labs(color="Phase",shape="Phase", y ="Fatigue", x="Week") + 
-  geom_vline(data = change, aes(xintercept=phase.change)) +
-  theme_bw() + theme(legend.position = "bottom")
+
+data(Schutte)
+
+graph_SCD(case = case, phase = treatment,
+          session = week, outcome = fatigue,
+          design = "MB", data = Schutte) + 
+  facet_wrap(~ case, ncol = 3) + 
+  theme(legend.position = "bottom")
+
 
 ## ----Schutte-center-----------------------------------------------------------
-# create time-by-trt interaction
-Schutte$trt_week <- with(Schutte, 
-                         unlist(tapply((treatment=="treatment") * week, 
-                                        list(treatment,case), 
-                                        function(x) x - min(x))) + (treatment=="treatment"))
-
 # time-point constants
 A <- 2
 B <- 9
 # center at follow-up time
-Center <- B
-Schutte$week <- Schutte$week - Center
+
+# create time-by-trt interaction
+Schutte <- 
+  preprocess_SCD(case = case, phase = treatment,
+                 session = week, outcome = fatigue,
+                 design = "MB", center = B, data = Schutte)
+
 
 ## ----Schutte-Model3-----------------------------------------------------------
-hlm1 <- lme(fixed = fatigue ~ week + treatment + trt_week, 
+hlm1 <- lme(fixed = fatigue ~ week + treatment + week_trt, 
             random = ~ 1 | case, 
             correlation = corAR1(0, ~ week | case),
             data = Schutte,
@@ -132,7 +128,7 @@ hlm1 <- lme(fixed = fatigue ~ week + treatment + trt_week,
 summary(hlm1)
 
 ## ----Schutte-ES-Model3, eval = TRUE-------------------------------------------
-Schutte_g1 <- g_mlm(hlm1, p_const = c(0,0,1,B - A), r_const = c(1,0,1))
+Schutte_g1 <- g_mlm(hlm1, p_const = c(0,0,1, B - A), r_const = c(1,0,1))
 Schutte_g1
 
 ## ----Schutte-Model4-----------------------------------------------------------
@@ -149,13 +145,14 @@ Schutte_g2
 unlist(extract_varcomp(hlm2))
 
 ## ----Schutte-Model5, warning = FALSE------------------------------------------
-hlm3 <- update(hlm2, random = ~ week + trt_week | case, 
+hlm3 <- update(hlm2, random = ~ week + week_trt | case, 
                control=lmeControl(msMaxIter = 50, apVar=FALSE, returnObject=TRUE))
 summary(hlm3)
 anova(hlm2, hlm3)
 
 ## ----Schutte-ES-Model5, eval = TRUE-------------------------------------------
 Schutte_g3 <- g_mlm(hlm3, p_const = c(0,0,1,B - A), r_const = c(1,0,0,0,0,0,0,1))
+Schutte_g3
 
 # compare effect size estimates
 data.frame(

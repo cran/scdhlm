@@ -642,7 +642,7 @@ server <-
     if (input$method == "RML") {
       A <- effect_size()$`Initial treatment time`
       B <- effect_size()$`Follow-up time`
-      p_const <- c(rep(0L, length(input$FE_base)), (B - A - 1)^as.integer(input$FE_trt))
+      p_const <- c(rep(0L, length(input$FE_base)), (B - A)^as.integer(input$FE_trt))
       
       # get r_const when centering at an arbitrary time instead of B
       r_dim <- length(input$RE_base) + length(input$RE_trt)
@@ -689,11 +689,11 @@ server <-
       }
     }
     
-    SCD_graph <- parse_code_chunk("graph", args = list(user_case = case,
-                                                       user_phase = phase,
-                                                       user_session = session,
-                                                       user_outcome = outcome,
-                                                       user_design = studyDesign()))
+    SCD_graph <- parse_code_chunk("graph-scd", args = list(user_case = case,
+                                                           user_phase = phase,
+                                                           user_session = session,
+                                                           user_outcome = outcome,
+                                                           user_design = studyDesign()))
 
     res <- c(header_res, read_res, clean_dat, '', fit_mod, '', calc_ES, '', SCD_graph, '')
     paste(res, collapse = "\n")
