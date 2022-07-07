@@ -54,8 +54,7 @@ quality_RML <- lme(fixed = outcome ~ treatment,
 summary(quality_RML)
 
 ## ----quality-g-mlm, eval=TRUE-------------------------------------------------
-quality_ES_RML <- g_mlm(quality_RML, p_const = c(0,1), 
-                         r_const = c(1,0,1), returnModel = TRUE)
+quality_ES_RML <- g_mlm(quality_RML, p_const = c(0,1), r_const = c(1,0,1))
 summary(quality_ES_RML)
 
 ## ----Laski-RML, eval = TRUE---------------------------------------------------
@@ -95,6 +94,8 @@ Laski_ES_RML2 <- g_mlm(Laski_RML2, p_const = c(0,1), r_const = c(1,0,0,0,1))
 Laski_ES_RML2
 
 ## ----Schutte-graph, warning = FALSE, message = FALSE, fig.width = 7, fig.height = 7----
+
+if (requireNamespace("ggplot2", quietly = TRUE)) {
 library(ggplot2)
 
 data(Schutte)
@@ -104,6 +105,7 @@ graph_SCD(case = case, phase = treatment,
           design = "MB", data = Schutte) + 
   facet_wrap(~ case, ncol = 3) + 
   theme(legend.position = "bottom")
+}
 
 
 ## ----Schutte-center-----------------------------------------------------------

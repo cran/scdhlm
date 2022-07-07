@@ -101,8 +101,7 @@ summary(quality_RML)
 ```
 The summary of the fitted model displays estimates of the component parameters, including the within-case and between-case standard deviations, auto-correlation, and (unstandardized) treatment effect estimate. The next step is to combine these estimated components into an effect size estimate using the `g_mlm` function. This function takes the fitted `lme` model object as input, followed by the vectors `p_const` and `r_const`, which specify the components of the fixed effects and variance estimates that are to be used in constructing the design-comparable SMD. For details on how to choose these constants, see Pustejovsky, Hedges, and Shadish (2014). In this example:
 ```{r quality-g-mlm, eval=TRUE}
-quality_ES_RML <- g_mlm(quality_RML, p_const = c(0,1), 
-                         r_const = c(1,0,1), returnModel = TRUE)
+quality_ES_RML <- g_mlm(quality_RML, p_const = c(0,1), r_const = c(1,0,1))
 summary(quality_ES_RML)
 ```
 The adjusted SMD effect size is estimated as `g_AB` = `r round(quality_ES_RML$g_AB, 3)`; its standard error is `SE_g_AB` = `r round(quality_ES_RML$SE_g_AB, 3)`; the estimated auto-correlation is `phi` = `r round(quality_ES_RML$theta$cor_params, 3)`; and the estimated degrees of freedom is `nu` = `r round(quality_ES_RML$nu, 1)`. In this example, the RML effect size estimate is about 10% larger than the estimate from `effect_size_MB`, with a slightly smaller variance estimate. The RML estimate of the auto-correlation is substantially higher than before, but `effect_size_MB` uses a moment estimator that is known to be biased towards zero and that does not perform well when outcomes are intermittently missing for some sessions (as is the case here). 
@@ -163,6 +162,8 @@ The adjusted effect size estimate that is `r round(100 * (1 - Laski_ES_RML2$g_AB
 Schutte, Malouff, and Brown (2008) evaluated the effect of an emotion-focused therapy program for adults with prolonged fatigue using a multiple baseline across individuals. The design included 13 adults who met clinical criteria for prolonged fatigue. Fatigue severity was measured weekly using a self-reported scale that ranged from 1 to 63. Following Pustejovsky, Hedges, and Shadish (2014), the data for participant 4 are excluded from the analysis because nearly all of the measurements for this case are at the upper extreme of the scale. The data for the remaining participants are plotted below.
 
 ```{r Schutte-graph, warning = FALSE, message = FALSE, fig.width = 7, fig.height = 7}
+
+if (requireNamespace("ggplot2", quietly = TRUE)) {
 library(ggplot2)
 
 data(Schutte)
@@ -172,6 +173,7 @@ graph_SCD(case = case, phase = treatment,
           design = "MB", data = Schutte) + 
   facet_wrap(~ case, ncol = 3) + 
   theme(legend.position = "bottom")
+}
 
 ```
 

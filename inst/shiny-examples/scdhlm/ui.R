@@ -28,7 +28,7 @@ ui <-
   shinyUI(fluidPage(
    tags$head(tags$style(HTML("div#inline label { width: 50%; } div#inline input { display: inline-block; width: 25%;}"))),
    titlePanel("Between-case standardized mean difference estimator"),
-   tabsetPanel(type = "tabs",
+   tabsetPanel(id = "scdhlm_calculator", type = "tabs",
         
         #--------------------
         # Load the data
@@ -81,6 +81,7 @@ ui <-
                         uiOutput("sessionIssues1"),
                         uiOutput("sessionIssues2"),
                         uiOutput("outcomeMapping"),
+                        uiOutput("outcomeIssue"),
                         strong("3. Please specify the baseline and treatment levels."),
                         column(12, br()),
                         uiOutput("phaseMapping"), 
@@ -118,16 +119,7 @@ ui <-
         #--------------------
         tabPanel("Model", 
            br(),
-           fluidRow(
-             column(6,
-                selectInput("method", label = "Estimation method",
-                            choices = estimation_names, 
-                            selected = "RML")
-             ),
-             column(6,
-                uiOutput("model_centering")
-             )
-           ),
+           uiOutput("estMethod"), 
            conditionalPanel(condition = "input.method == 'HPS'",
               plotOutput("HPS_plot", height = "auto")   
            ),
@@ -135,24 +127,50 @@ ui <-
            conditionalPanel(condition = "input.method == 'RML'",
               fluidRow(
                 column(6,
-                   wellPanel(
-                     h4("Baseline phase"),
-                     uiOutput("modelDegree_baseline"),
-                     uiOutput("modelSpec_baseline")
-                   )
+                       wellPanel(
+                         h4("Baseline phase"),
+                         uiOutput("modelDegree_baseline"),
+                         uiOutput("modelSpec_baseline")
+                       )
                 ),
                 column(6,
-                   wellPanel(
-                     h4("Treatment phase"),
-                     uiOutput("modelDegree_treatment"),
-                     uiOutput("modelSpec_treatment")
-                   )
+                       wellPanel(
+                         h4("Treatment phase"),
+                         uiOutput("modelDegree_treatment"),
+                         uiOutput("modelSpec_treatment")
+                       )
                 )
               ),
               fluidRow(
                 column(12, 
-                htmlOutput("model_spec")
+                  htmlOutput("model_spec")
                 )
+              ),
+              fluidRow(
+                column(12,
+                  textOutput("ES_timing_message")
+                )
+              ),
+              fluidRow(
+                column(12, 
+                       wellPanel(
+                         h4("Session-level error structure assumptions"),
+                         fluidRow(
+                           column(6,
+                                  selectInput("corStruct",
+                                               label = "Correlation structure of session-level errors",
+                                               choices = c("Auto-regressive (AR1)" = "AR(1)", "Moving average (MA1)" = "MA(1)", "Independent" = "IID"),
+                                               selected = "AR(1)")
+                           ),
+                           column(6,
+                                  selectInput("varStruct",
+                                               label = "Variance of session-level errors",
+                                               choices = c("Constant variance" = "hom",
+                                                           "Variance differs by phase" = "het"),
+                                               selected = "hom")
+                           )                           
+                         )
+                       ))
               ),
               tabsetPanel(type = "tabs",
                 tabPanel("Graph",
@@ -162,6 +180,8 @@ ui <-
                 ),
                 tabPanel("Model estimates",
                   column(12, br()),
+                  conditionalPanel(condition = "input.degree_base != 0",
+                                   uiOutput("model_centering")),
                   verbatimTextOutput("model_fit")
                 )
               )
