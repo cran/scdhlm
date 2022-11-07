@@ -17,19 +17,6 @@ paste_object <- function(object) {
 }
 
 #---------------------------------------------------------------
-# calculate timing defaults
-#---------------------------------------------------------------
-
-default_times <- function(x) {
-  range <- range(x$session)
-  case_base_last <- with(x, tapply(session[trt==0], case[trt==0], max))
-  case_trt_range <- with(x, tapply(session[trt==1], case[trt==1], function(x) diff(range(x)) + 1))
-  A <- min(case_base_last)
-  B <- A + min(case_trt_range[which(case_base_last == min(case_base_last))])
-  list(range = range, A = A, B = B)
-}
-
-#---------------------------------------------------------------
 # model validation
 #---------------------------------------------------------------
 
@@ -86,7 +73,7 @@ summarize_ES <- function(res, filter_vals,
     if (design %in% c("RMBB", "CMB")) {
       rho_level2 <- round(with(res, (theta$Tau[[1]][1] + theta$Tau[[2]][1]) / 
                            (theta$Tau[[1]][1] + theta$Tau[[2]][1] + theta$sigma_sq)), 3)
-      rho_level3 <- round(with(res, theta$Tau[[2]][1] / 
+      rho_level3 <- round(with(res, theta$Tau[[1]][1] / 
                            (theta$Tau[[1]][1] + theta$Tau[[2]][1] + theta$sigma_sq)), 3)
       res$rho <- paste0("Level2:", rho_level2, "  Level3:", rho_level3)
     } else {

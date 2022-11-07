@@ -1,26 +1,7 @@
 context("Graphing functions")
 
-
-## Actual Test
-
-
-test_that("graph_SCD works with example dataset.", {
-  
-  skip(message = "Auxiliary dataset not included in package.")
-  
-  Kattenberg <- read.csv("auxilliary/Kattenberg-data.csv")
-  
-  Kat_graph <- graph_SCD(case = ID_participant, 
-                         phase = Daytype,
-                         session = Workday,
-                         outcome = SRL_SCORE_MEAN,
-                         design = "TR",
-                         data = Kattenberg)  
-  
-  expect_s3_class(Kat_graph, "ggplot")
-})
-
 test_that("graph_SCD works for design = 'TR'", {
+  
   skip_if_not_installed("ggplot2")
   
   data("Anglesea")
@@ -85,7 +66,7 @@ test_that("graph_SCD works for design = 'MBP'", {
   expect_s3_class(Laski_graph2, "ggplot")
   expect_invisible(print(Laski_graph2))
   
-  keys <- setdiff(names(Laski_graph1), c("plot_env", "labels"))
+  keys <- setdiff(names(Laski_graph1), c("plot_env", "labels","layers"))
   expect_equal(Laski_graph1[keys], Laski_graph2[keys])
   
 })
@@ -127,7 +108,7 @@ test_that("graph_SCD works for design = 'RMBB'", {
   expect_s3_class(Thiemann_graph3, "ggplot")
   expect_invisible(print(Thiemann_graph3))
   
-  keys <- setdiff(names(Thiemann_graph1), c("plot_env", "labels"))
+  keys <- setdiff(names(Thiemann_graph1), c("plot_env", "labels", "layers"))
   expect_equal(Thiemann_graph1[keys], Thiemann_graph3[keys])
   
 })
@@ -139,14 +120,14 @@ test_that("graph_SCD works for design = 'CMB'", {
   data("Bryant2018")
   
   Bryant2018_RML <-lme(fixed = outcome ~ treatment,
-                       random = ~ 1 | school / case,
-                       correlation = corAR1(0, ~ session | school / case),
+                       random = ~ 1 | group / case,
+                       correlation = corAR1(0, ~ session | group / case),
                        weights = varIdent(form = ~ 1 | treatment),
                        data = Bryant2018)
 
   # graph using data = 
   Bry_graph1 <- graph_SCD(design = "CMB",
-                          cluster = school, case = case,
+                          cluster = group, case = case,
                           phase = treatment, session = session, outcome = outcome,
                           treatment_name = "treatment", model_fit = Bryant2018_RML,
                           data = Bryant2018)
@@ -155,7 +136,7 @@ test_that("graph_SCD works for design = 'CMB'", {
   
   # graph using vectors only
   Bry_graph2 <- graph_SCD(design = "CMB",
-                          cluster = Bryant2018$school, case = Bryant2018$case,
+                          cluster = Bryant2018$group, case = Bryant2018$case,
                           phase = Bryant2018$treatment, session = Bryant2018$session, 
                           outcome = Bryant2018$outcome,
                           treatment_name = "treatment", model_fit = Bryant2018_RML)
@@ -166,13 +147,13 @@ test_that("graph_SCD works for design = 'CMB'", {
   
   # graph with model_fit (without data)
   Bry_graph3 <- graph_SCD(design = "CMB",
-                          cluster = school, case = case,
+                          cluster = group, case = case,
                           phase = treatment, session = session, outcome = outcome,
                           treatment_name = "treatment", model_fit = Bryant2018_RML)
   expect_s3_class(Bry_graph3, "ggplot")
   expect_invisible(print(Bry_graph3))
   
-  keys <- setdiff(names(Bry_graph1), c("plot_env", "labels"))
+  keys <- setdiff(names(Bry_graph1), c("plot_env", "labels", "layers"))
   expect_equal(Bry_graph1[keys], Bry_graph3[keys])
   
 })

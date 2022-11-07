@@ -284,7 +284,7 @@ server <-
           names(dat) <- c("studyID","case", "series", "outcome", "session", "phase", "trt_time", "time_c")
           cluster <- NULL
         } else if (studyDesign() == "CMB") {
-          names(dat) <- c("studyID","cluster", "case", "phase", "session", "session_trt", "outcome", "session_c")
+          names(dat) <- c("studyID","school", "cluster", "case", "phase", "session", "session_trt", "outcome", "session_c")
           series <- NULL
         }
         
@@ -301,16 +301,17 @@ server <-
         phase <- datFile()[,input$phaseID]
         session <- as.numeric(datFile()[,input$session])
         outcome <- as.numeric(datFile()[,input$outcome])
+        cluster <- series <- NULL
         dat <- data.frame(case = case, phase = phase, session = session, outcome = outcome)
         
         if (studyDesign() == "RMBB") {
-          cluster <- NULL
           dat$series <- datFile()[,input$seriesID]
           dat <- dat[order(dat$case, dat$series, dat$session),]
         } else if (studyDesign() == "CMB") {
-          series <- NULL
           dat$cluster <- datFile()[,input$clusterID]
           dat <- dat[order(dat$cluster, dat$case, dat$session),]
+        } else {
+          dat <- dat[order(dat$case, dat$session),]
         }
         
         if (!is.null(input$filters)) {
@@ -361,7 +362,16 @@ server <-
     # Centering and timing sliders for RML estimation of MBD
     
     time_range <- reactive({
-      default_times(datClean())
+      
+      cluster <- if (studyDesign() == "CMB") substitute(cluster) else NULL
+      series <- if (studyDesign() == "RMBB") substitute(series) else NULL
+      default_times(
+        design = studyDesign(),
+        case = case, phase = phase, session = session,
+        cluster = cluster, series = series,
+        treatment_name = NULL, data = datClean()
+      )
+      
     })
     
     output$model_centering <- renderUI({
@@ -369,7 +379,7 @@ server <-
         session_range <- time_range()$range
         sliderInput("model_center", "Center session at", 
                     min=session_range[1], max=session_range[2], 
-                    value=time_range()$A, step = 1)
+                    value=time_range()$B, step = 1)
       }
     })
     
@@ -558,14 +568,118 @@ server <-
     
     # Model spec output
     
-    output$model_fit <- renderPrint({
+    output$model_sample_size <- renderTable({
+      if (input$method == "RML") {
+        if (studyDesign() %in% c("MBP", "TR")) {
+          data.frame("Total number of observations" = nobs(model_fit()$fit), 
+                     "Total number of groups" = nlevels(summary(model_fit()$fit)$groups$case),
+                     check.names = FALSE) 
+        } else if (studyDesign() == "CMB") {
+          data.frame("Total number of observations" = nobs(model_fit()$fit), 
+                     "Total number of cases" = nlevels(summary(model_fit()$fit)$groups$case),
+                     "Total number of clusters" = nlevels(summary(model_fit()$fit)$groups$cluster),
+                     check.names = FALSE)
+        } else if (studyDesign() == "RMBB") {
+          data.frame("Total number of observations" = nobs(model_fit()$fit),
+                     "Total number of series" = nlevels(summary(model_fit()$fit)$groups$series),
+                     "Total number of cases" = nlevels(summary(model_fit()$fit)$groups$case),
+                     check.names = FALSE)
+        }
+      }
+    }, 
+    caption = "Sample sizes", 
+    caption.placement = getOption("xtable.caption.placement", "top"),
+    digits = 4, include.rownames = FALSE)
+    
+    output$model_fit_fixed <- renderTable({
+      if (input$method == "RML") {
+        summary(model_fit()$fit)$tTable
+      }
+    }, 
+    caption = "Fixed effects", 
+    caption.placement = getOption("xtable.caption.placement", "top"),
+    digits = 4, include.rownames = TRUE)
+    
+    output$model_fit_random <- renderTable({
+      if (input$method == "RML") {
+        random_table <- data.frame(VarCorr(model_fit()$fit)[])
+        rownames <- rownames(VarCorr(model_fit()$fit)[])
+        
+        # set the rownames
+        if (studyDesign() %in% c("CMB", "RMBB")) {
+          row_index_lvl3 <- length(input$RE_base2)+length(input$RE_trt2)+1
+          rownames_lvl3 <- c("", rownames[2:row_index_lvl3])
+          rownames_lvl2 <- c("", rownames[(row_index_lvl3 + 2):(length(rownames))])
+          name_lvl3 <- if (studyDesign() == "CMB") "<strong>Cluster-level</strong>" else "<strong>Case-level</strong>"
+          name_lvl2 <- if (studyDesign() == "CMB") "<strong>Case-level</strong>" else "<strong>Series-level</strong>"
+          random_levels <- c(name_lvl3, rep("", row_index_lvl3-1), name_lvl2, rep("", (length(rownames)-row_index_lvl3-1)))
+          random_table[1, 1] <- NA # get rid of pdLogChol
+          random_table[(row_index_lvl3 + 1), 1] <- NA
+          random_table <- cbind("Level" = random_levels, "Rowname" = c(rownames_lvl3, rownames_lvl2), random_table)
+          random_table[, 3:4] <- lapply(random_table[, 3:4], function(x) as.numeric(x))
+          names(random_table)[2] <- ""
+        } else if (studyDesign() %in% c("MBP", "TR")) {
+          random_table <- cbind("Rowname" = rownames, random_table)
+          random_table[, 2:3] <- lapply(random_table[, 2:3], function(x) as.numeric(x))
+          names(random_table)[1] <- ""
+        }
+        
+        # set the column names
+        columnnames <- names(random_table)
+        names(random_table) <- gsub("V[0-9]|Var.[0-9]", "", columnnames)
+        random_table
+        
+      }
+    },
+    caption = "Random effects",
+    caption.placement = getOption("xtable.caption.placement", "top"),
+    digits = 4, na = "", include.rownames = FALSE, sanitize.text.function = function(x){x})
+    
+    output$model_fit_corr <- renderTable({
+      if (input$method=="RML" & input$corStruct != "IID") {
+        data.frame(
+          "Correlation parameter" = effect_size()$`Auto-correlation`,
+          check.names = FALSE
+        )
+      }
+    }, 
+    caption = "Correlation structure", 
+    caption.placement = getOption("xtable.caption.placement", "top"),
+    digits = 4, include.rownames = FALSE)
+    
+    output$model_fit_var <- renderTable({
+      if (input$method == "RML" & input$varStruct == "het") {
+        data.frame(
+          "Baseline" = 1,
+          "Treatment" = effect_size()$`Variance parameter`
+        )
+      }
+    }, 
+    caption = "Variance structure", 
+    caption.placement = getOption("xtable.caption.placement", "top"),
+    digits = 4, include.rownames = FALSE)
+    
+    output$model_info <- renderTable({
+      if (input$method == "RML") {
+        data.frame("AIC" = AIC(model_fit()$fit), 
+                   "BIC" = BIC(model_fit()$fit), 
+                   "Log likelihood" = as.numeric(model_fit()$fit$logLik),
+                   check.names = FALSE) 
+      }
+    }, 
+    caption = "Information criteria", 
+    caption.placement = getOption("xtable.caption.placement", "top"),
+    digits = 4, include.rownames = FALSE)
+    
+    output$model_fit_convg <- renderTable({
       if (input$method=="RML") {
-        list(fixed = model_fit()$fixed, 
-             random = model_fit()$random, 
-             fit = summary(model_fit()$fit),
-             converged = model_fit()$converged)
-      } 
-    })
+        if (isTRUE(model_fit()$converged)) {
+          "The model converged."
+        } else {
+          "The model did not converge."
+        }
+      }
+    }, colnames = FALSE)
     
     
     # Calculate effect sizes
@@ -680,8 +794,7 @@ server <-
       graph_SCD(design = studyDesign(), 
                 cluster = cluster, case = case, series = series, 
                 phase = phase, session = session, outcome = outcome, 
-                model_fit = model_fit()$fit, 
-                data = datClean())
+                model_fit = model_fit()$fit)
     }
   }, height = function() 120 * nlevels(datClean()[[1]]),
   width = function() 700)
@@ -788,7 +901,7 @@ server <-
         clean_dat <- c(clean_dat_A,
                        '',
                        parse_code_chunk("clean-example-nofilter-CMB",
-                                        args = list(user_parms = paste(example_parms$vars[-c(1,6,8)], collapse='", "'),
+                                        args = list(user_parms = paste(example_parms$vars[-c(1,2,7,9)], collapse='", "'),
                                                     user_design = studyDesign(),
                                                     user_model_center = model_center))
         )
@@ -940,7 +1053,7 @@ server <-
         bc_mat2 <- 2 * tcrossprod(bc_vec2) - diag(bc_vec2^2)
         r_const_base2 <- bc_mat2[upper.tri(bc_mat2, diag = TRUE)]
         r_const_trt2 <- rep(0L, r_const_dim2 - length(r_const_base2))
-        r_const <- c(r_const_base, r_const_trt, r_const_base2, r_const_trt2, r_const_cor, r_const_var, 1L)
+        r_const <- c(r_const_base2, r_const_trt2, r_const_base, r_const_trt, r_const_cor, r_const_var, 1L)
       }
       
       if (studyDesign() == "MBP") {

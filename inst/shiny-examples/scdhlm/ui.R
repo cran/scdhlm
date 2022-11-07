@@ -37,6 +37,7 @@ ui <-
                  navlistPanel(widths = c(3,9),
                               tabPanel("About", includeMarkdown("markdown/scdhlm.md")),
                               tabPanel("Accessing scdhlm", includeMarkdown("markdown/Accessing_scdhlm.md")),
+                              tabPanel("Demo videos", includeMarkdown("markdown/demos.md")),
                               tabPanel("References", includeMarkdown("markdown/references.md")),
                               tabPanel("Example data", includeMarkdown("markdown/example-data.md"))
                  )
@@ -179,10 +180,18 @@ ui <-
                   )
                 ),
                 tabPanel("Model estimates",
-                  column(12, br()),
-                  conditionalPanel(condition = "input.degree_base != 0",
-                                   uiOutput("model_centering")),
-                  verbatimTextOutput("model_fit")
+                         column(12, br()),
+                         conditionalPanel(condition = "input.degree_base != 0",
+                                          uiOutput("model_centering")),
+                         fluidRow(
+                           column(12, h4("Model fit"), tableOutput("model_sample_size")),
+                           column(12, tableOutput("model_fit_fixed")),
+                           column(12, tableOutput("model_fit_random")),
+                           column(12, tableOutput("model_fit_corr")),
+                           column(12, tableOutput("model_fit_var")),
+                           column(12, tableOutput("model_info")),
+                           column(12, h4("Convergence"), tableOutput("model_fit_convg"))
+                         )
                 )
               )
            )

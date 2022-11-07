@@ -85,7 +85,7 @@ phase_lines_by_case <- function(case, phase, session) {
 #'
 #' data(Bryant2018)
 #' graph_SCD(design="CMB",
-#'           cluster=school, case=case, phase=treatment,
+#'           cluster=group, case=case, phase=treatment,
 #'           session=session, outcome=outcome,
 #'           treatment_name = "treatment",
 #'           data=Bryant2018)
@@ -182,7 +182,7 @@ graph_SCD <- function(design, case, phase, session, outcome,
     
     dat$fitted <- if(design == "CMB") predict(model_fit, level = 1) else predict(model_fit)
 
-    p <- p + ggplot2::geom_line(data = dat, ggplot2::aes(y = fitted), size = 0.8)
+    p <- p + ggplot2::geom_line(data = dat, ggplot2::aes(y = fitted), linewidth = 0.8)
 
   }
 
