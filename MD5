@@ -1,6 +1,6 @@
-3a91511c17813da677ea8a19d3119ab4 *DESCRIPTION
+a2e986511697953bd0eaf89be353f7f0 *DESCRIPTION
 7e9107e95d3da124a501cb0a001b93e8 *NAMESPACE
-7872c05cad561882cb91d451f8d09533 *NEWS.md
+6659cf5ffaffa8e9a07fe53b9f820dbb *NEWS.md
 f81d22f1ae48a4acad653e97c47872ff *R/HPS-ES-functions.R
 7d91043f6018448281d8eedb12c52489 *R/REML-ES-functions.R
 131d826e0e7f1f261e064a977039eff6 *R/calc_BCSMD.R
@@ -12,8 +12,8 @@ b99ff45bc6beef1aa6a341154019c8b9 *R/preprocess-function.R
 f0142487d5c72c9db707c98d7caefa06 *R/scdhlm-package.r
 394351dffe8d5276b3ee56cc75ba3264 *R/scdhlm.R
 fdf9328b200c97c7b366fb556d3e2052 *R/simulation-functions.R
-afbe4209b3bb961ba3e41cbfe79ea507 *build/partial.rdb
-253f6b44be7cee095b566430a8da4dc2 *build/vignette.rds
+cb4924f3573383fca290a0a8e2ca5294 *build/partial.rdb
+086070034f2ead2fa3af44b9631e8d3d *build/vignette.rds
 9c724cbde768e261ef20e0293a7beb0d *data/AlberMorgan.RData
 28cf92b37d10c63209cc888fde061571 *data/Anglesea.RData
 46bfc00ee5a62c8c75d53c10a4f1a067 *data/BartonArwood.RData
@@ -48,7 +48,7 @@ b2d21b03f4008436f09c7641040558be *demo/Simulation-MB1.R
 57c674d0df6b5b5b7415da521e956167 *inst/CITATION
 b589dea0b76da884b1971915070b03fd *inst/doc/Estimating-effect-sizes.R
 129eca768ace0e49be9ecc8d175ba242 *inst/doc/Estimating-effect-sizes.Rmd
-011dd116be7e40d9e53e097054a98395 *inst/doc/Estimating-effect-sizes.html
+11369a7800349464e5639ba5496f6171 *inst/doc/Estimating-effect-sizes.html
 45739c5dba8ef8a2c3a3e7905f3cda7f *inst/shiny-examples/scdhlm/code-chunks/clean-example-filter.R
 eb9ac73c5190d8db3a989fec7771c744 *inst/shiny-examples/scdhlm/code-chunks/clean-example-nofilter-CMB.R
 6e2fffa30e9183934e8e8abd0f4fac18 *inst/shiny-examples/scdhlm/code-chunks/clean-example-nofilter-RMBB.R
@@ -73,12 +73,12 @@ c71c374ad4612d8c652ea9aea8c25763 *inst/shiny-examples/scdhlm/lme-fit.R
 3d60190fe2cdc16a87ebec50605135f2 *inst/shiny-examples/scdhlm/mappings.R
 bf5f6cf35ccadfcfb2730a3df9051447 *inst/shiny-examples/scdhlm/markdown/Accessing_scdhlm.Rmd
 d1ff75f0fc8bf21c7656375171064451 *inst/shiny-examples/scdhlm/markdown/Accessing_scdhlm.md
-a6de452ef3ba5703db448021936c41a8 *inst/shiny-examples/scdhlm/markdown/demos.md
+6701c46b259ded7be84b3e9081016dd3 *inst/shiny-examples/scdhlm/markdown/demos.md
 a0311d04415453b1e427524509b7ced3 *inst/shiny-examples/scdhlm/markdown/example-data.md
 1e48ff4e206a1fc3ce5c364decb4a142 *inst/shiny-examples/scdhlm/markdown/references.md
 b5734fa4a0a3b40e74d988bf3f6b3fb5 *inst/shiny-examples/scdhlm/markdown/scdhlm.Rmd
-bd77d3d7e83d5aedb2528425de989bca *inst/shiny-examples/scdhlm/markdown/scdhlm.md
-ba7e50a3fa0c7bd3b7636b902475721d *inst/shiny-examples/scdhlm/rsconnect/shinyapps.io/jepusto/scdhlm.dcf
+9fd72ec121eab02333f2544bab7eb136 *inst/shiny-examples/scdhlm/markdown/scdhlm.md
+78db04803ea38ec9174cc6e596c08391 *inst/shiny-examples/scdhlm/rsconnect/shinyapps.io/jepusto/scdhlm.dcf
 d97c5b122b203654d54e7aeef1963fb2 *inst/shiny-examples/scdhlm/scraps.R
 e11bde2c32dc54255e0353b35d732474 *inst/shiny-examples/scdhlm/server.R
 495ba300d3aebde2a301541a52e6a95d *inst/shiny-examples/scdhlm/ui.R
@@ -133,7 +133,7 @@ d185f9e0c2a55db31e3acb2ee09f7461 *man/simulate_MB4.Rd
 3ab1bcc2443c1c8d720cd16e3b507efa *tests/testthat.R
 77a5f780c63d0628351b88636c142fcc *tests/testthat/Rplots.pdf
 2a8800a0aae415cc0dd4487ad81f3708 *tests/testthat/syntax.txt
-1d1b713b664b2b08c6f80c9b8176f2d6 *tests/testthat/test-calc_BCSMD.R
+bf00b8fabcc57620cb8303fc126f2fa6 *tests/testthat/test-calc_BCSMD.R
 d2fcb936b9da349bc4756b36e05b2469 *tests/testthat/test-centering.R
 d1ffdbe8a68dabf3b4bdc7c909700027 *tests/testthat/test-g_mlm.R
 7e133f2d04f35c804d6563db58f6a9b0 *tests/testthat/test-scdhlm-app.R

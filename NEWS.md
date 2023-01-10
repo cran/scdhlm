@@ -1,3 +1,7 @@
+# scdhlm 0.7.1
+
+* Fixed problem in unit tests leading to failure on the CRAN ATLAS build. 
+
 # scdhlm 0.7.0
 
 * New convenience functions:
