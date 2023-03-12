@@ -273,7 +273,8 @@ test_that("calc_BCSMD() returns the same result as g_mlm() for Bryant 2018 data 
   Bryant_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | group/case,
                      correlation = corAR1(0.01, ~ session | group/case),
-                     data = Bryant2018)
+                     data = Bryant2018,
+                     na.action = na.omit)
   
   # simple model
   suppressWarnings(expect_error(g_REML(Bryant_RML1, p_const = c(0, 1), r_const = c(1, 0, 1, 1)))) # g_REML not available for 3-level data
@@ -312,7 +313,8 @@ test_that("calc_BCSMD() returns the same result as g_mlm() for Bryant 2018 data 
   Bryant_RML1 <- lme(fixed = outcome ~ treatment,
                      random = ~ 1 | group/case,
                      correlation = corAR1(0.01, ~ session | group/case),
-                     data = Bryant2018)
+                     data = Bryant2018,
+                     na.action = na.omit)
   
   # complex model
   default_AB <- default_times(design = "CMB",
@@ -367,6 +369,7 @@ test_that("The batch_calc_BCSMD() works for MBP design.", {
   
   # single calculator
   data("Laski")
+  skip_if_not_installed("dplyr", "1.1.0")
   
   # model 1: basic model without time trends
   Laski1_single <- 
@@ -420,7 +423,7 @@ test_that("The batch_calc_BCSMD() works for MBP design.", {
   res_AB <- 
     dat_MBP %>% 
     dplyr::group_by(studyID) %>%
-    dplyr::summarise(
+    dplyr::reframe(
       default_times(
         design = "MBP",
         case = case,
@@ -428,8 +431,7 @@ test_that("The batch_calc_BCSMD() works for MBP design.", {
         session = session,
         cluster = NULL,
         series = NULL
-      ),
-      .groups = 'drop'
+      )
     ) %>% 
     dplyr::mutate(variable = rep(c("range", "A", "B"), length(unique(dat_MBP$studyID)))) %>% 
     dplyr::rename(value = `default_times(...)`)
