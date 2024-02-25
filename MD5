@@ -1,11 +1,11 @@
-2ca68ecb2982733bd08a50dd11900575 *DESCRIPTION
+8187e98412a8eedadb48078fd70395c0 *DESCRIPTION
 7e9107e95d3da124a501cb0a001b93e8 *NAMESPACE
-ade5c5f2df0904320c566a6dcc74b107 *NEWS.md
+bb42e07afe1c2ffd1441fdca46448831 *NEWS.md
 f81d22f1ae48a4acad653e97c47872ff *R/HPS-ES-functions.R
 7d91043f6018448281d8eedb12c52489 *R/REML-ES-functions.R
 8e958a5d4969b82ddda38837e5fb7370 *R/calc_BCSMD.R
 d57a9125d5efe3141750cd95eb07dd7e *R/confidence-interval-functions.R
-7a465ce8cb6fddbe164b7a0dc6106d76 *R/graphing-functions.R
+218254deea2fc25907934fdd5c1f247a *R/graphing-functions.R
 491a489b83cb33b4b1bba6f62393f1df *R/lmeInfo-imports.R
 1d3aeda1f5e51b2dc93eb459cde49de3 *R/matrix-functions.R
 e316be4f4afbced61f320ea05eedb785 *R/preprocess-function.R
@@ -47,7 +47,7 @@ b2d21b03f4008436f09c7641040558be *demo/Simulation-MB1.R
 91dba1ec29fce85c54c80526eaf5fa0b *demo/Simulation-MB4.R
 b589dea0b76da884b1971915070b03fd *inst/doc/Estimating-effect-sizes.R
 129eca768ace0e49be9ecc8d175ba242 *inst/doc/Estimating-effect-sizes.Rmd
-e6e4a435bf9b8f868f15a2bb98a33347 *inst/doc/Estimating-effect-sizes.html
+4251dbff97fa47b1fed9bcd6013c42cb *inst/doc/Estimating-effect-sizes.html
 45739c5dba8ef8a2c3a3e7905f3cda7f *inst/shiny-examples/scdhlm/code-chunks/clean-example-filter.R
 eb9ac73c5190d8db3a989fec7771c744 *inst/shiny-examples/scdhlm/code-chunks/clean-example-nofilter-CMB.R
 6e2fffa30e9183934e8e8abd0f4fac18 *inst/shiny-examples/scdhlm/code-chunks/clean-example-nofilter-RMBB.R
@@ -77,7 +77,7 @@ a0311d04415453b1e427524509b7ced3 *inst/shiny-examples/scdhlm/markdown/example-da
 197b6167dc57b76b4913f1f4fd1d3ded *inst/shiny-examples/scdhlm/markdown/references.md
 b5734fa4a0a3b40e74d988bf3f6b3fb5 *inst/shiny-examples/scdhlm/markdown/scdhlm.Rmd
 cee9acec58a41ad57ab7b35eec9c6979 *inst/shiny-examples/scdhlm/markdown/scdhlm.md
-78db04803ea38ec9174cc6e596c08391 *inst/shiny-examples/scdhlm/rsconnect/shinyapps.io/jepusto/scdhlm.dcf
+7c1ab22adca10472ba046dacc0057d83 *inst/shiny-examples/scdhlm/rsconnect/shinyapps.io/jepusto/scdhlm.dcf
 d97c5b122b203654d54e7aeef1963fb2 *inst/shiny-examples/scdhlm/scraps.R
 e11bde2c32dc54255e0353b35d732474 *inst/shiny-examples/scdhlm/server.R
 495ba300d3aebde2a301541a52e6a95d *inst/shiny-examples/scdhlm/ui.R
@@ -129,7 +129,9 @@ b2c40e791fc739d767bf68f4f0cc3a41 *man/session_by_treatment.Rd
 c838b94ae56b77915e01674a76a8123c *man/simulate.g_REML.Rd
 e7e7cb92e4419b353e5aa8496cc83daf *man/simulate_MB2.Rd
 d185f9e0c2a55db31e3acb2ee09f7461 *man/simulate_MB4.Rd
+de1c91dd5282f343dc73c424f891ce3c *tests/testdata/BC-SMD-Calculations.csv
 3ab1bcc2443c1c8d720cd16e3b507efa *tests/testthat.R
+733db5d33ce0590be7f9e44547d8a349 *tests/testthat/Rplots.pdf
 2a8800a0aae415cc0dd4487ad81f3708 *tests/testthat/syntax.txt
 0502dead8b9303dafc5e1c55f2967fb7 *tests/testthat/test-calc_BCSMD.R
 318c5244b14927b6dd324bc26fe7f80d *tests/testthat/test-centering.R
@@ -138,7 +140,7 @@ d185f9e0c2a55db31e3acb2ee09f7461 *man/simulate_MB4.Rd
 8e4c6d37a864a13734f548f322813204 *tests/testthat/test_HPS_examples.R
 a41bce00a907f5af3d7b789ffb986b42 *tests/testthat/test_HPS_functions.R
 a0f46208de59641501ef3e99a55ce276 *tests/testthat/test_functions_same.R
-3f8ad2dad0b2c8c0e9768bd2bd48c4fb *tests/testthat/test_graphing_functions.R
+5ea0e078656140349554af1fe5e9acd2 *tests/testthat/test_graphing_functions.R
 afa58e25a82588822fd3c349ee7d3e36 *tests/testthat/test_preprocess_function.R
 d06e653b1018ae1509452820888672fe *tests/testthat/test_user_examples.R
 129eca768ace0e49be9ecc8d175ba242 *vignettes/Estimating-effect-sizes.Rmd

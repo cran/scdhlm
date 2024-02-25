@@ -1,6 +1,6 @@
 Package: scdhlm
 Title: Estimating Hierarchical Linear Models for Single-Case Designs
-Version: 0.7.2
+Version: 0.7.3
 Authors@R: c(
     person("James", "Pustejovsky", email = "jepusto@gmail.com", role = c("aut", "cre")),
     person("Man", "Chen", role = "aut"), 
@@ -29,10 +29,10 @@ RoxygenNote: 7.2.3
 Encoding: UTF-8
 Language: en-US
 NeedsCompilation: no
-Packaged: 2023-03-11 14:21:31 UTC; jepusto
+Packaged: 2024-02-25 21:44:37 UTC; jepusto
 Author: James Pustejovsky [aut, cre],
   Man Chen [aut],
   Bethany Hamilton [aut]
 Maintainer: James Pustejovsky <jepusto@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-03-12 10:30:02 UTC
+Date/Publication: 2024-02-25 22:10:02 UTC
