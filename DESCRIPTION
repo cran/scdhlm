@@ -1,6 +1,6 @@
 Package: scdhlm
 Title: Estimating Hierarchical Linear Models for Single-Case Designs
-Version: 0.7.3
+Version: 0.7.4
 Authors@R: c(
     person("James", "Pustejovsky", email = "jepusto@gmail.com", role = c("aut", "cre")),
     person("Man", "Chen", role = "aut"), 
@@ -24,15 +24,16 @@ Imports: stats, utils, readxl, rlang, dplyr, tidyselect, magrittr,
         lmeInfo (>= 0.3.0)
 Depends: nlme, R (>= 3.0.1)
 Suggests: knitr, markdown, rmarkdown, ggplot2, plyr, boot, parallel,
-        shiny, shinytest, glue, janitor, rclipboard, rvest, testthat
-RoxygenNote: 7.2.3
+        shiny, shinytest, glue, janitor, rclipboard, rvest, testthat,
+        snow, doSNOW, foreach, iterators, reshape, rlecuyer
+RoxygenNote: 7.3.3
 Encoding: UTF-8
 Language: en-US
 NeedsCompilation: no
-Packaged: 2024-02-25 21:44:37 UTC; jepusto
+Packaged: 2026-01-21 20:17:14 UTC; jamespustejovsky
 Author: James Pustejovsky [aut, cre],
   Man Chen [aut],
   Bethany Hamilton [aut]
 Maintainer: James Pustejovsky <jepusto@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-02-25 22:10:02 UTC
+Date/Publication: 2026-01-21 20:40:02 UTC

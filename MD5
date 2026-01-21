@@ -1,6 +1,6 @@
-8187e98412a8eedadb48078fd70395c0 *DESCRIPTION
+fb9d269ed63d2d155e96eda220064106 *DESCRIPTION
 7e9107e95d3da124a501cb0a001b93e8 *NAMESPACE
-bb42e07afe1c2ffd1441fdca46448831 *NEWS.md
+f1bac22517e3b3cd828c6ee5b0432093 *NEWS.md
 f81d22f1ae48a4acad653e97c47872ff *R/HPS-ES-functions.R
 7d91043f6018448281d8eedb12c52489 *R/REML-ES-functions.R
 8e958a5d4969b82ddda38837e5fb7370 *R/calc_BCSMD.R
@@ -12,8 +12,8 @@ e316be4f4afbced61f320ea05eedb785 *R/preprocess-function.R
 f0142487d5c72c9db707c98d7caefa06 *R/scdhlm-package.r
 394351dffe8d5276b3ee56cc75ba3264 *R/scdhlm.R
 fdf9328b200c97c7b366fb556d3e2052 *R/simulation-functions.R
-cb4924f3573383fca290a0a8e2ca5294 *build/partial.rdb
-086070034f2ead2fa3af44b9631e8d3d *build/vignette.rds
+75d0a007992c60d09f764686e9397c0f *build/partial.rdb
+bb5e31e4f76c039a0a8a2b278e51d8b6 *build/vignette.rds
 9c724cbde768e261ef20e0293a7beb0d *data/AlberMorgan.RData
 28cf92b37d10c63209cc888fde061571 *data/Anglesea.RData
 46bfc00ee5a62c8c75d53c10a4f1a067 *data/BartonArwood.RData
@@ -45,9 +45,9 @@ e17e7c3f06d4c70df89b9c2343759cc8 *demo/Schutte-application.R
 b2d21b03f4008436f09c7641040558be *demo/Simulation-MB1.R
 5d69b47a77be7bb8949eca5a854aa037 *demo/Simulation-MB2.R
 91dba1ec29fce85c54c80526eaf5fa0b *demo/Simulation-MB4.R
-b589dea0b76da884b1971915070b03fd *inst/doc/Estimating-effect-sizes.R
+3d438eb4d3d6f665e47a6c36b99bb7d5 *inst/doc/Estimating-effect-sizes.R
 129eca768ace0e49be9ecc8d175ba242 *inst/doc/Estimating-effect-sizes.Rmd
-4251dbff97fa47b1fed9bcd6013c42cb *inst/doc/Estimating-effect-sizes.html
+64790aafbd8518758d8d5e5e62c31439 *inst/doc/Estimating-effect-sizes.html
 45739c5dba8ef8a2c3a3e7905f3cda7f *inst/shiny-examples/scdhlm/code-chunks/clean-example-filter.R
 eb9ac73c5190d8db3a989fec7771c744 *inst/shiny-examples/scdhlm/code-chunks/clean-example-nofilter-CMB.R
 6e2fffa30e9183934e8e8abd0f4fac18 *inst/shiny-examples/scdhlm/code-chunks/clean-example-nofilter-RMBB.R
@@ -131,7 +131,6 @@ e7e7cb92e4419b353e5aa8496cc83daf *man/simulate_MB2.Rd
 d185f9e0c2a55db31e3acb2ee09f7461 *man/simulate_MB4.Rd
 de1c91dd5282f343dc73c424f891ce3c *tests/testdata/BC-SMD-Calculations.csv
 3ab1bcc2443c1c8d720cd16e3b507efa *tests/testthat.R
-733db5d33ce0590be7f9e44547d8a349 *tests/testthat/Rplots.pdf
 2a8800a0aae415cc0dd4487ad81f3708 *tests/testthat/syntax.txt
 0502dead8b9303dafc5e1c55f2967fb7 *tests/testthat/test-calc_BCSMD.R
 318c5244b14927b6dd324bc26fe7f80d *tests/testthat/test-centering.R
